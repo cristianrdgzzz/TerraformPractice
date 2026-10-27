@@ -11,16 +11,18 @@ terraform {
       version = "~> 4.0"
     }
   }
+  backend "azurerm" {
+    resource_group_name = "rg-terraform-state"
+    storage_account_name = "sttflibro1855"
+    container_name = "tfstate"
+    key = "01-web-server-azure.terraform.tfstate"
+  }
 }
 
 provider "azurerm" {
   features {}
+  }
 
-  client_id       = var.azure_client_id
-  client_secret   = var.azure_client_secret
-  subscription_id = var.azure_subscription_id
-  tenant_id       = var.azure_tenant_id
-}
 
 provider "tls" {}
 
@@ -35,7 +37,7 @@ resource "tls_private_key" "example" {
 # Resource groups are logical containers for resources in Azure
 resource "azurerm_resource_group" "example" {
   name     = "rg-terraform-example"
-  location = "westus2"
+  location = "northeurope"
 }
 
 # Create an Azure Virtual Network
