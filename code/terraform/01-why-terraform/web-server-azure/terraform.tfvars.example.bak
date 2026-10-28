@@ -1,0 +1,4 @@
+# Copy this file to terraform.tfvars and fill in your Azure subscription ID
+# Don't commit terraform.tfvars to version control as it may contain sensitive data
+
+subscription_id = "YOUR_AZURE_SUBSCRIPTION_ID"

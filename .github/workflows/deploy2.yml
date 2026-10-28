@@ -6,7 +6,7 @@ on:
       folder: 
         description: 'Ruta de la carpeta a ejecutar' 
         required: true 
-        default: 'code/terraform/00-preface/hello-world-azure' 
+        default: 'code/terraform/00-preface/web-server-azure' 
       action: 
         description: 'Acción a realizar' 
         required: true 
