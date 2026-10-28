@@ -1,3 +1,5 @@
+
+#Primero terraform y el provider de Azure 
 terraform {
   required_version = ">= 1.0.0, < 2.0.0"
 
@@ -11,16 +13,16 @@ terraform {
       version = "~> 4.0"
     }
   }
+# Configuración del backend para almacenar el estado de Terraform en Azure Storage
+backend "azurerm" {
+    resource_group_name = "rg-terraform-state"
+    storage_account_name = "sttflibro1855"
+    container_name = "tfstate"
+    key = "01-web-server-azure.terraform.tfstate"
+  }
 }
 
-provider "azurerm" {
-  features {}
 
-  client_id       = var.azure_client_id
-  client_secret   = var.azure_client_secret
-  subscription_id = var.azure_subscription_id
-  tenant_id       = var.azure_tenant_id
-}
 
 provider "tls" {}
 
@@ -30,6 +32,7 @@ resource "tls_private_key" "app" {
   rsa_bits  = 4096
 }
 
+#######1
 # Define an Azure Resource Group
 # Resource groups are containers that hold related resources for an Azure solution
 resource "azurerm_resource_group" "app" {
@@ -37,6 +40,7 @@ resource "azurerm_resource_group" "app" {
   location = "East US"
 }
 
+######2
 # Define an Azure Virtual Network
 # Virtual networks provide isolated network environments for your resources
 resource "azurerm_virtual_network" "app" {
@@ -45,6 +49,7 @@ resource "azurerm_virtual_network" "app" {
   location            = azurerm_resource_group.app.location
   resource_group_name = azurerm_resource_group.app.name
 }
+
 
 # Define a subnet within the virtual network
 # Subnets allow you to segment the virtual network into smaller networks
