@@ -22,9 +22,13 @@ backend "azurerm" {
   }
 }
 
-
+provider "azurerm" {
+  features {}
+}
 
 provider "tls" {}
+
+
 
 # Generate an SSH private key for secure VM access
 resource "tls_private_key" "app" {
