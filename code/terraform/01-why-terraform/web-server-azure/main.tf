@@ -133,7 +133,7 @@ resource "azurerm_linux_virtual_machine" "app" {
   name                = "vm-webserver-app"
   location            = azurerm_resource_group.app.location
   resource_group_name = azurerm_resource_group.app.name
-  size                = "Standard_B2s_v2"
+  size                = "Standard_D2s_v7"
 
   admin_username = "azureuser"
 
