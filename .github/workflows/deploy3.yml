@@ -6,7 +6,7 @@ on:
       folder: 
         description: 'Ruta de la carpeta a ejecutar' 
         required: true 
-        default: 'code\terraform\02-intro-to-terraform-syntax\webserver-cluster-azure2.0' 
+        default: 'code/terraform/02-intro-to-terraform-syntax/webserver-cluster-azure2.0'
       action: 
         description: 'Acción a realizar' 
         required: true 
