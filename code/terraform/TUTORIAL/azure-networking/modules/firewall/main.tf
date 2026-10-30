@@ -48,7 +48,7 @@ resource "azurerm_firewall" "main" {
   sku_name            = var.sku_name
   sku_tier            = var.sku_tier
   firewall_policy_id  = null # Using inline rules, not firewall policy
-  
+
   # IP Configuration: Defines the firewall's public IP
   # The firewall uses this IP for outbound internet access
   ip_configuration {
@@ -56,7 +56,7 @@ resource "azurerm_firewall" "main" {
     subnet_id            = var.firewall_subnet_id
     public_ip_address_id = var.public_ip_address_id
   }
-  
+
   # Management IP Configuration: Required for Premium SKU
   # Provides management access to the firewall
   dynamic "management_ip_configuration" {
@@ -67,26 +67,26 @@ resource "azurerm_firewall" "main" {
       public_ip_address_id = var.management_public_ip_address_id
     }
   }
-  
+
   # Availability Zones: For high availability
   # Standard: 1 zone, Premium: All zones (zone-redundant)
   zones = var.zones
-  
+
   # DNS Settings: Custom DNS servers for FQDN resolution
   # Used by application rules to resolve FQDNs
   dns_servers = var.dns_servers
-  
+
   # Private IP Ranges: Traffic to these ranges bypasses the firewall
   # Useful for Azure service endpoints, on-premises networks, etc.
   private_ip_ranges = var.private_ip_ranges
-  
+
   # Threat Intelligence: Blocks traffic from/to known malicious IPs/domains
   # Options:
   # - Alert: Logs but allows traffic
   # - Deny: Blocks traffic
   # - Off: Disabled
   threat_intel_mode = var.threat_intel_mode
-  
+
   tags = var.tags
 }
 
@@ -111,13 +111,13 @@ resource "azurerm_firewall_network_rule_collection" "main" {
   for_each = {
     for collection in var.network_rule_collections : collection.name => collection
   }
-  
+
   name                = each.value.name
   azure_firewall_name = azurerm_firewall.main.name
   resource_group_name = var.resource_group_name
   priority            = each.value.priority
   action              = each.value.action
-  
+
   # Network Rules
   dynamic "rule" {
     for_each = each.value.rules
@@ -154,13 +154,13 @@ resource "azurerm_firewall_application_rule_collection" "main" {
   for_each = {
     for collection in var.application_rule_collections : collection.name => collection
   }
-  
+
   name                = each.value.name
   azure_firewall_name = azurerm_firewall.main.name
   resource_group_name = var.resource_group_name
   priority            = each.value.priority
   action              = each.value.action
-  
+
   # Application Rules
   dynamic "rule" {
     for_each = each.value.rules
@@ -168,7 +168,7 @@ resource "azurerm_firewall_application_rule_collection" "main" {
       name             = rule.value.name
       source_addresses = rule.value.source_addresses
       target_fqdns     = rule.value.target_fqdns
-      
+
       dynamic "protocol" {
         for_each = [rule.value.protocol]
         content {
@@ -202,13 +202,13 @@ resource "azurerm_firewall_nat_rule_collection" "main" {
   for_each = {
     for collection in var.nat_rule_collections : collection.name => collection
   }
-  
+
   name                = each.value.name
   azure_firewall_name = azurerm_firewall.main.name
   resource_group_name = var.resource_group_name
   priority            = each.value.priority
   action              = "Dnat" # NAT rules always perform DNAT
-  
+
   # NAT Rules
   dynamic "rule" {
     for_each = each.value.rules

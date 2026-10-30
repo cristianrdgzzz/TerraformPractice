@@ -30,7 +30,7 @@ resource "azurerm_virtual_network" "main" {
   location            = var.location
   resource_group_name = var.resource_group_name
   address_space       = var.address_space
-  
+
   # DDoS Protection: Protects against distributed denial-of-service attacks
   # Requires a DDoS Protection Plan (Standard tier) to be created separately
   # This is a paid service that provides advanced DDoS mitigation
@@ -38,15 +38,15 @@ resource "azurerm_virtual_network" "main" {
     id     = var.ddos_protection_plan_id
     enable = var.enable_ddos_protection
   }
-  
+
   # Custom DNS servers: Useful for hybrid scenarios where you need to resolve
   # on-premises resources or use custom DNS infrastructure
   # If empty, Azure's default DNS (168.63.129.16) is used
   dns_servers = var.dns_servers
-  
+
   # Note: VM Protection is not directly configurable on the VNet resource
   # VM protection is configured at the VM level using the 'protection_policy' block
-  
+
   tags = var.tags
 }
 
@@ -62,18 +62,18 @@ resource "azurerm_virtual_network" "main" {
 # ----------------------------------------------------------------------------
 resource "azurerm_subnet" "main" {
   for_each = var.subnets
-  
+
   name                 = each.key
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.main.name
   address_prefixes     = each.value.address_prefixes
-  
+
   # Service Endpoints: Extend VNet identity to Azure services
   # This allows services like Storage Accounts and SQL Databases to be
   # accessed from the VNet without going through the public internet
   # Traffic stays on Azure's backbone network
   service_endpoints = each.value.service_endpoints
-  
+
   # Service Delegation: Delegates subnet management to Azure services
   # Example: Delegating to "Microsoft.ContainerService/managedClusters"
   # allows AKS to manage the subnet (creates required resources automatically)
@@ -87,13 +87,13 @@ resource "azurerm_subnet" "main" {
       }
     }
   }
-  
+
   # Private Endpoint Network Policies:
   # When enabled, allows private endpoints to be created in this subnet
   # Private endpoints provide private IP connectivity to Azure services
   # Note: This attribute may vary by Azure provider version
   # private_endpoint_network_policies_enabled = each.value.private_endpoint_network_policies_enabled
-  
+
   # Private Link Service Network Policies:
   # When enabled, allows private link services to be created in this subnet
   # Private link services expose your services privately to other VNets
@@ -113,11 +113,11 @@ resource "azurerm_subnet" "main" {
 # ----------------------------------------------------------------------------
 resource "azurerm_network_security_group" "main" {
   for_each = var.network_security_groups
-  
+
   name                = each.key
   location            = var.location
   resource_group_name = var.resource_group_name
-  
+
   tags = var.tags
 }
 
@@ -143,24 +143,24 @@ resource "azurerm_network_security_rule" "main" {
       ]
     ]) : pair.key => pair
   }
-  
-  name                        = each.value.rule.name
-  priority                    = each.value.rule.priority
-  direction                   = each.value.rule.direction
-  access                      = each.value.rule.access
-  protocol                    = each.value.rule.protocol
-  source_port_range           = each.value.rule.source_port_range
-  source_port_ranges          = length(each.value.rule.source_port_ranges) > 0 ? each.value.rule.source_port_ranges : null
-  destination_port_range      = each.value.rule.destination_port_range
-  destination_port_ranges     = length(each.value.rule.destination_port_ranges) > 0 ? each.value.rule.destination_port_ranges : null
-  source_address_prefix       = each.value.rule.source_address_prefix
-  source_address_prefixes     = length(each.value.rule.source_address_prefixes) > 0 ? each.value.rule.source_address_prefixes : null
-  source_application_security_group_ids = length(each.value.rule.source_application_security_group_ids) > 0 ? each.value.rule.source_application_security_group_ids : null
-  destination_address_prefix  = each.value.rule.destination_address_prefix
-  destination_address_prefixes = length(each.value.rule.destination_address_prefixes) > 0 ? each.value.rule.destination_address_prefixes : null
+
+  name                                       = each.value.rule.name
+  priority                                   = each.value.rule.priority
+  direction                                  = each.value.rule.direction
+  access                                     = each.value.rule.access
+  protocol                                   = each.value.rule.protocol
+  source_port_range                          = each.value.rule.source_port_range
+  source_port_ranges                         = length(each.value.rule.source_port_ranges) > 0 ? each.value.rule.source_port_ranges : null
+  destination_port_range                     = each.value.rule.destination_port_range
+  destination_port_ranges                    = length(each.value.rule.destination_port_ranges) > 0 ? each.value.rule.destination_port_ranges : null
+  source_address_prefix                      = each.value.rule.source_address_prefix
+  source_address_prefixes                    = length(each.value.rule.source_address_prefixes) > 0 ? each.value.rule.source_address_prefixes : null
+  source_application_security_group_ids      = length(each.value.rule.source_application_security_group_ids) > 0 ? each.value.rule.source_application_security_group_ids : null
+  destination_address_prefix                 = each.value.rule.destination_address_prefix
+  destination_address_prefixes               = length(each.value.rule.destination_address_prefixes) > 0 ? each.value.rule.destination_address_prefixes : null
   destination_application_security_group_ids = length(each.value.rule.destination_application_security_group_ids) > 0 ? each.value.rule.destination_application_security_group_ids : null
-  resource_group_name         = var.resource_group_name
-  network_security_group_name = azurerm_network_security_group.main[each.value.nsg].name
+  resource_group_name                        = var.resource_group_name
+  network_security_group_name                = azurerm_network_security_group.main[each.value.nsg].name
 }
 
 # ----------------------------------------------------------------------------
@@ -176,16 +176,16 @@ resource "azurerm_subnet_network_security_group_association" "main" {
     for pair in flatten([
       for nsg_name, nsg_config in var.network_security_groups : [
         for subnet_name in nsg_config.associate_to_subnets : {
-          key      = "${nsg_name}-${subnet_name}"
-          nsg      = nsg_name
-          subnet   = subnet_name
+          key    = "${nsg_name}-${subnet_name}"
+          nsg    = nsg_name
+          subnet = subnet_name
         }
       ]
     ]) : pair.key => pair
   }
-  
+
   subnet_id                 = azurerm_subnet.main[each.value.subnet].id
-  network_security_group_id  = azurerm_network_security_group.main[each.value.nsg].id
+  network_security_group_id = azurerm_network_security_group.main[each.value.nsg].id
 }
 
 # ----------------------------------------------------------------------------
@@ -203,13 +203,13 @@ resource "azurerm_subnet_network_security_group_association" "main" {
 # ----------------------------------------------------------------------------
 resource "azurerm_route_table" "main" {
   for_each = var.route_tables
-  
+
   name                = each.key
   location            = var.location
   resource_group_name = var.resource_group_name
   # Note: BGP route propagation control may vary by Azure provider version
   # By default, BGP routes from gateways are propagated
-  
+
   tags = var.tags
 }
 
@@ -238,7 +238,7 @@ resource "azurerm_route" "main" {
       ]
     ]) : pair.key => pair
   }
-  
+
   name                   = each.value.route.name
   resource_group_name    = var.resource_group_name
   route_table_name       = azurerm_route_table.main[each.value.rt].name
@@ -267,7 +267,7 @@ resource "azurerm_subnet_route_table_association" "main" {
       ]
     ]) : pair.key => pair
   }
-  
+
   subnet_id      = azurerm_subnet.main[each.value.subnet].id
   route_table_id = azurerm_route_table.main[each.value.rt].id
 }

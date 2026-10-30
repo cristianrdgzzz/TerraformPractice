@@ -39,8 +39,8 @@ variable "private_endpoints" {
     }
   EOT
   type = map(object({
-    name                          = string
-    subnet_id                     = string
+    name      = string
+    subnet_id = string
     private_service_connection = object({
       name                           = string
       private_connection_resource_id = string
@@ -79,8 +79,8 @@ variable "private_link_services" {
     }
   EOT
   type = map(object({
-    name                                          = string
-    load_balancer_frontend_ip_configuration_ids   = list(string)
+    name                                        = string
+    load_balancer_frontend_ip_configuration_ids = list(string)
     nat_ip_configurations = list(object({
       name                       = string
       private_ip_address_version = string # "IPv4" or "IPv6"

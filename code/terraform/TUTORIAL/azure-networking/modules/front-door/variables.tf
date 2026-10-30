@@ -141,7 +141,7 @@ variable "frontend_endpoints" {
     name                                    = string
     host_name                               = string
     session_affinity_enabled                = optional(bool, false)
-    session_affinity_ttl_seconds             = optional(number, 0)
+    session_affinity_ttl_seconds            = optional(number, 0)
     web_application_firewall_policy_link_id = optional(string, null)
   }))
   default = []
@@ -187,26 +187,26 @@ variable "routing_rules" {
   EOT
   type = list(object({
     name               = string
-    frontend_endpoints  = list(string)
-    accepted_protocols  = list(string) # "Http", "Https"
-    patterns_to_match   = list(string)
+    frontend_endpoints = list(string)
+    accepted_protocols = list(string) # "Http", "Https"
+    patterns_to_match  = list(string)
     enabled            = optional(bool, true)
     route_configuration = object({
       # Forwarding Configuration
-      forwarding_protocol = optional(string, null) # "HttpOnly", "HttpsOnly", "MatchRequest"
-      backend_pool_name   = optional(string, null)
-      cache_enabled       = optional(bool, false)
+      forwarding_protocol                   = optional(string, null) # "HttpOnly", "HttpsOnly", "MatchRequest"
+      backend_pool_name                     = optional(string, null)
+      cache_enabled                         = optional(bool, false)
       cache_query_parameter_strip_directive = optional(string, "StripNone")
-      cache_duration      = optional(string, null)
-      compression_enabled  = optional(bool, false)
-      forwarding_path     = optional(string, null)
+      cache_duration                        = optional(string, null)
+      compression_enabled                   = optional(bool, false)
+      forwarding_path                       = optional(string, null)
       # Redirect Configuration
-      redirect_type       = optional(string, null) # "Moved", "Found", "TemporaryRedirect", "PermanentRedirect"
-      redirect_protocol   = optional(string, null) # "HttpOnly", "HttpsOnly", "MatchRequest"
-      redirect_host       = optional(string, null)
-      redirect_path       = optional(string, null)
+      redirect_type         = optional(string, null) # "Moved", "Found", "TemporaryRedirect", "PermanentRedirect"
+      redirect_protocol     = optional(string, null) # "HttpOnly", "HttpsOnly", "MatchRequest"
+      redirect_host         = optional(string, null)
+      redirect_path         = optional(string, null)
       redirect_query_string = optional(string, null)
-      redirect_fragment   = optional(string, null)
+      redirect_fragment     = optional(string, null)
     })
   }))
   default = []

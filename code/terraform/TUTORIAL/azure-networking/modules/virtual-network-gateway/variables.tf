@@ -29,7 +29,7 @@ variable "gateway_type" {
     - ExpressRoute: Private, dedicated connectivity via service provider
   EOT
   type        = string
-  
+
   validation {
     condition     = contains(["Vpn", "ExpressRoute"], var.gateway_type)
     error_message = "Gateway type must be either 'Vpn' or 'ExpressRoute'."
@@ -46,7 +46,7 @@ variable "vpn_type" {
   EOT
   type        = string
   default     = "RouteBased"
-  
+
   validation {
     condition     = contains(["RouteBased", "PolicyBased"], var.vpn_type)
     error_message = "VPN type must be either 'RouteBased' or 'PolicyBased'."
@@ -155,8 +155,8 @@ variable "bgp_settings" {
     }
   EOT
   type = object({
-    asn             = number
-    peer_weight     = optional(number, 0)
+    asn               = number
+    peer_weight       = optional(number, 0)
     peering_addresses = optional(list(string), [])
   })
   default = null
@@ -182,8 +182,8 @@ variable "vpn_client_configuration" {
     }
   EOT
   type = object({
-    address_space         = list(string)
-    root_certificates    = optional(list(object({
+    address_space = list(string)
+    root_certificates = optional(list(object({
       name             = string
       public_cert_data = string
     })), [])
@@ -192,8 +192,8 @@ variable "vpn_client_configuration" {
       thumbprint = string
     })), [])
     radius_server_address = optional(string, null)
-    radius_server_secret   = optional(string, null)
-    vpn_client_protocols   = optional(list(string), ["OpenVPN", "IkeV2"])
+    radius_server_secret  = optional(string, null)
+    vpn_client_protocols  = optional(list(string), ["OpenVPN", "IkeV2"])
   })
   default = null
 }

@@ -65,10 +65,10 @@ output "connectivity_configuration_details" {
   description = "Detailed information about all connectivity configurations"
   value = {
     for k, v in azurerm_network_manager_connectivity_configuration.main : k => {
-      id                           = v.id
-      name                         = v.name
-      connectivity_topology        = v.connectivity_topology
-      applies_to_group_ids         = v.applies_to_group_ids
+      id                              = v.id
+      name                            = v.name
+      connectivity_topology           = v.connectivity_topology
+      applies_to_group_ids            = v.applies_to_group_ids
       delete_existing_peering_enabled = v.delete_existing_peering_enabled
     }
   }

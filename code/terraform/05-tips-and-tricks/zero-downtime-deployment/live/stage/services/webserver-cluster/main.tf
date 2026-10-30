@@ -16,7 +16,7 @@ provider "aws" {
 module "webserver_cluster" {
   source = "../../../../modules/services/webserver-cluster"
 
-  ami         = "ami-0fb653ca2d3203ac1"
+  ami = "ami-0fb653ca2d3203ac1"
 
   server_text = var.server_text
 

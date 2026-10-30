@@ -13,7 +13,7 @@ resource "aws_launch_configuration" "example" {
   image_id        = var.ami
   instance_type   = var.instance_type
   security_groups = [aws_security_group.instance.id]
-  user_data       = templatefile("${path.module}/user-data.sh", {
+  user_data = templatefile("${path.module}/user-data.sh", {
     server_port = var.server_port
     db_address  = data.terraform_remote_state.db.outputs.address
     db_port     = data.terraform_remote_state.db.outputs.port
@@ -52,7 +52,7 @@ resource "aws_autoscaling_group" "example" {
 
   dynamic "tag" {
     for_each = {
-      for key, value in var.custom_tags:
+      for key, value in var.custom_tags :
       key => upper(value)
       if key != "Name"
     }

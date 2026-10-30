@@ -21,7 +21,7 @@ module "asg" {
   cluster_name  = "hello-world-${var.environment}"
   ami           = var.ami
   instance_type = var.instance_type
-  user_data     = templatefile("${path.module}/user-data.sh", {
+  user_data = templatefile("${path.module}/user-data.sh", {
     server_port = var.server_port
     db_address  = local.mysql_config.address
     db_port     = local.mysql_config.port
@@ -35,7 +35,7 @@ module "asg" {
   subnet_ids        = local.subnet_ids
   target_group_arns = [aws_lb_target_group.asg.arn]
   health_check_type = "ELB"
-  
+
   custom_tags = var.custom_tags
 }
 

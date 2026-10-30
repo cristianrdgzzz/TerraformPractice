@@ -118,8 +118,8 @@ resource "aws_autoscaling_group" "example" {
 
   # Tag all instances in the group
   tag {
-    key                 = "Name"
-    value               = "terraform-asg-example"
+    key   = "Name"
+    value = "terraform-asg-example"
     # Propagate tag to instances launched by the ASG
     propagate_at_launch = true
   }
@@ -137,9 +137,9 @@ resource "aws_security_group" "instance" {
 
   # Inbound rule: Allow HTTP traffic on the web server port
   ingress {
-    from_port   = var.server_port
-    to_port     = var.server_port
-    protocol    = "tcp"
+    from_port = var.server_port
+    to_port   = var.server_port
+    protocol  = "tcp"
     # Allow from any source (0.0.0.0/0)
     # In production, consider restricting to specific IPs or security groups
     cidr_blocks = ["0.0.0.0/0"]

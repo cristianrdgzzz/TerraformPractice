@@ -34,7 +34,7 @@ variable "sku_name" {
   description = "SKU name. Options: 'AZFW_Hub' (Standard), 'AZFW_VNet' (Premium)"
   type        = string
   default     = "AZFW_Hub"
-  
+
   validation {
     condition     = contains(["AZFW_Hub", "AZFW_VNet"], var.sku_name)
     error_message = "SKU name must be either 'AZFW_Hub' (Standard) or 'AZFW_VNet' (Premium)."
@@ -45,7 +45,7 @@ variable "sku_tier" {
   description = "SKU tier. Options: 'Standard' or 'Premium'"
   type        = string
   default     = "Standard"
-  
+
   validation {
     condition     = contains(["Standard", "Premium"], var.sku_tier)
     error_message = "SKU tier must be either 'Standard' or 'Premium'."
@@ -84,7 +84,7 @@ variable "threat_intel_mode" {
   description = "Threat Intelligence mode. Options: 'Alert', 'Deny', 'Off'"
   type        = string
   default     = "Alert"
-  
+
   validation {
     condition     = contains(["Alert", "Deny", "Off"], var.threat_intel_mode)
     error_message = "Threat Intelligence mode must be 'Alert', 'Deny', or 'Off'."
@@ -134,11 +134,11 @@ variable "network_rule_collections" {
       name                  = string
       source_addresses      = list(string)
       destination_addresses = list(string)
-      destination_ports      = list(string)
+      destination_ports     = list(string)
       protocols             = list(string) # "TCP", "UDP", "ICMP", "Any"
     }))
   }))
-  
+
   default = []
 }
 
@@ -181,7 +181,7 @@ variable "application_rule_collections" {
       })
     }))
   }))
-  
+
   default = []
 }
 
@@ -222,7 +222,7 @@ variable "nat_rule_collections" {
       protocols           = list(string) # "TCP", "UDP"
     }))
   }))
-  
+
   default = []
 }
 

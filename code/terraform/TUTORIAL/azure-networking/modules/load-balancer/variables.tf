@@ -31,7 +31,7 @@ variable "sku" {
   description = "SKU of the Load Balancer. Options: 'Basic' or 'Standard'. Standard is recommended for production."
   type        = string
   default     = "Standard"
-  
+
   validation {
     condition     = contains(["Basic", "Standard"], var.sku)
     error_message = "SKU must be either 'Basic' or 'Standard'."
@@ -42,7 +42,7 @@ variable "sku_tier" {
   description = "SKU tier. Options: 'Regional' or 'Global'. Global is only available for Standard SKU."
   type        = string
   default     = "Regional"
-  
+
   validation {
     condition     = contains(["Regional", "Global"], var.sku_tier)
     error_message = "SKU tier must be either 'Regional' or 'Global'."
@@ -105,7 +105,7 @@ variable "backend_address_pools" {
   type = list(object({
     name = string
   }))
-  
+
   default = []
 }
 
@@ -140,7 +140,7 @@ variable "probe_configurations" {
     interval_in_seconds = optional(number, 15)
     number_of_probes    = optional(number, 2)
   }))
-  
+
   default = []
 }
 
@@ -179,7 +179,7 @@ variable "load_balancing_rules" {
     enable_tcp_reset               = optional(bool, false)
     disable_outbound_snat          = optional(bool, false) # Use outbound rules instead
   }))
-  
+
   default = []
 }
 
@@ -203,15 +203,15 @@ variable "outbound_rules" {
     ]
   EOT
   type = list(object({
-    name                        = string
+    name                           = string
     frontend_ip_configuration_name = string
-    backend_address_pool_id     = string
-    protocol                    = string # "Tcp", "Udp", or "All"
-    allocated_outbound_ports    = number # Number of ports per VM (default: 1024)
-    idle_timeout_in_minutes     = optional(number, 4)
-    enable_tcp_reset            = optional(bool, false)
+    backend_address_pool_id        = string
+    protocol                       = string # "Tcp", "Udp", or "All"
+    allocated_outbound_ports       = number # Number of ports per VM (default: 1024)
+    idle_timeout_in_minutes        = optional(number, 4)
+    enable_tcp_reset               = optional(bool, false)
   }))
-  
+
   default = []
 }
 
@@ -245,7 +245,7 @@ variable "inbound_nat_rules" {
     enable_floating_ip             = optional(bool, false)
     enable_tcp_reset               = optional(bool, false)
   }))
-  
+
   default = []
 }
 

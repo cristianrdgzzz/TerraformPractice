@@ -24,14 +24,14 @@
 # ----------------------------------------------------------------------------
 resource "azurerm_public_ip" "main" {
   count = var.active_active ? 2 : 1
-  
+
   name                = "${var.vpn_gateway_name}-pip-${count.index + 1}"
   location            = var.location
   resource_group_name = var.resource_group_name
   allocation_method   = var.public_ip_configuration.allocation_method
   sku                 = var.public_ip_configuration.sku
   zones               = var.public_ip_configuration.zones
-  
+
   tags = var.tags
 }
 
@@ -70,7 +70,7 @@ resource "azurerm_virtual_network_gateway" "main" {
   sku                 = var.sku
   active_active       = var.active_active
   enable_bgp          = var.enable_bgp
-  
+
   # Gateway IP Configuration (Subnet)
   ip_configuration {
     name                          = var.gateway_ip_configuration.name
@@ -78,7 +78,7 @@ resource "azurerm_virtual_network_gateway" "main" {
     private_ip_address_allocation = "Dynamic"
     subnet_id                     = var.gateway_ip_configuration.subnet_id
   }
-  
+
   # Second IP Configuration (for active-active mode)
   dynamic "ip_configuration" {
     for_each = var.active_active ? [1] : []
@@ -89,14 +89,14 @@ resource "azurerm_virtual_network_gateway" "main" {
       subnet_id                     = var.gateway_ip_configuration.subnet_id
     }
   }
-  
+
   # BGP Settings
   dynamic "bgp_settings" {
     for_each = var.enable_bgp && var.bgp_settings != null ? [var.bgp_settings] : []
     content {
-      asn = bgp_settings.value.asn
+      asn         = bgp_settings.value.asn
       peer_weight = bgp_settings.value.peer_weight
-      
+
       # Peering Addresses
       dynamic "peering_address" {
         for_each = bgp_settings.value.peering_addresses != null ? bgp_settings.value.peering_addresses : []
@@ -106,13 +106,13 @@ resource "azurerm_virtual_network_gateway" "main" {
       }
     }
   }
-  
+
   # Point-to-Site VPN Configuration
   dynamic "vpn_client_configuration" {
     for_each = var.vpn_client_configuration != null ? [var.vpn_client_configuration] : []
     content {
       address_space = vpn_client_configuration.value.address_space
-      
+
       # Root Certificates
       dynamic "root_certificate" {
         for_each = vpn_client_configuration.value.root_certificates != null ? vpn_client_configuration.value.root_certificates : []
@@ -121,7 +121,7 @@ resource "azurerm_virtual_network_gateway" "main" {
           public_cert_data = root_certificate.value.public_cert_data
         }
       }
-      
+
       # Revoked Certificates
       dynamic "revoked_certificate" {
         for_each = vpn_client_configuration.value.revoked_certificates != null ? vpn_client_configuration.value.revoked_certificates : []
@@ -130,16 +130,16 @@ resource "azurerm_virtual_network_gateway" "main" {
           thumbprint = revoked_certificate.value.thumbprint
         }
       }
-      
+
       # RADIUS Server Configuration
       radius_server_address = vpn_client_configuration.value.radius_server_address
       radius_server_secret  = vpn_client_configuration.value.radius_server_secret
-      
+
       # VPN Client Protocols
       vpn_client_protocols = vpn_client_configuration.value.vpn_client_protocols
     }
   }
-  
+
   tags = var.tags
 }
 

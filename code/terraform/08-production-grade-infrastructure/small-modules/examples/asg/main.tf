@@ -16,7 +16,7 @@ provider "aws" {
 module "asg" {
   source = "../../modules/cluster/asg-rolling-deploy"
 
-  cluster_name  = var.cluster_name
+  cluster_name = var.cluster_name
 
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
@@ -25,7 +25,7 @@ module "asg" {
   max_size           = 1
   enable_autoscaling = false
 
-  subnet_ids        = data.aws_subnets.default.ids
+  subnet_ids = data.aws_subnets.default.ids
 }
 
 data "aws_vpc" "default" {

@@ -64,8 +64,8 @@ module "network_manager" {
   source = "git::git@github.com:smyha/TerraformTutorial.git//terraform-up-and-running-code/code/terraform/TUTORIAL/azure-networking-tutorial/modules/virtual-network-manager"
 
   # Resource Group
-  resource_group_name = var.resource_group_name != "" ? var.resource_group_name : try(module.resource_group[0].resource_group_name, "")
-  location            = var.location
+  resource_group_name  = var.resource_group_name != "" ? var.resource_group_name : try(module.resource_group[0].resource_group_name, "")
+  location             = var.location
   network_manager_name = var.network_manager_name
 
   # Resource Group Auto-creation (if resource_group_name is empty)

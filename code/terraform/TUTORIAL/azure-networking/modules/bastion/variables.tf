@@ -42,7 +42,7 @@ variable "sku" {
   description = "SKU of Azure Bastion. Options: 'Basic' or 'Standard'"
   type        = string
   default     = "Basic"
-  
+
   validation {
     condition     = contains(["Basic", "Standard"], var.sku)
     error_message = "SKU must be either 'Basic' or 'Standard'."
@@ -53,7 +53,7 @@ variable "scale_units" {
   description = "Number of scale units (2-50). Only for Standard SKU. Default is 2."
   type        = number
   default     = 2
-  
+
   validation {
     condition     = var.scale_units >= 2 && var.scale_units <= 50
     error_message = "Scale units must be between 2 and 50."

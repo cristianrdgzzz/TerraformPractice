@@ -33,10 +33,10 @@ variable "assignment_scope" {
 variable "required_tags" {
   description = "List of required tags with their configuration."
   type = list(object({
-    name          = string
-    display_name  = optional(string)
-    description   = optional(string)
-    default_value = optional(string) # Used with Modify effect
+    name           = string
+    display_name   = optional(string)
+    description    = optional(string)
+    default_value  = optional(string)       # Used with Modify effect
     allowed_values = optional(list(string)) # Optional validation
   }))
   default = [
@@ -51,9 +51,9 @@ variable "required_tags" {
       description  = "Team or individual responsible for this resource"
     },
     {
-      name         = "Environment"
-      display_name = "Environment"
-      description  = "Environment name (dev, staging, prod)"
+      name           = "Environment"
+      display_name   = "Environment"
+      description    = "Environment name (dev, staging, prod)"
       allowed_values = ["dev", "staging", "prod"]
     }
   ]

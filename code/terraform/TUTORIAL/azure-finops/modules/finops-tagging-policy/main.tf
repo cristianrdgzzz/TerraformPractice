@@ -30,17 +30,17 @@ resource "azurerm_policy_definition" "tagging" {
     if = {
       allOf = [
         for tag in var.required_tags : {
-          field    = "tags['${tag.name}']"
-          exists   = "false"
+          field  = "tags['${tag.name}']"
+          exists = "false"
         }
       ]
     }
     then = {
       effect = var.policy_effect
       details = var.policy_effect == "Modify" ? {
-        type   = "Microsoft.Resources/tags"
+        type      = "Microsoft.Resources/tags"
         operation = "addOrReplace"
-        value  = {
+        value = {
           for tag in var.required_tags : tag.name => tag.default_value
           if tag.default_value != null
         }
@@ -113,10 +113,10 @@ resource "azurerm_management_group_policy_assignment" "tagging" {
 
   name                 = var.assignment_name != null ? var.assignment_name : "finops-tagging-assignment"
   policy_definition_id = azurerm_policy_definition.tagging.id
-  management_group_id   = var.management_group_id
-  location              = var.assignment_location
-  display_name          = var.assignment_display_name != null ? var.assignment_display_name : "FinOps: Required Tags"
-  description           = var.assignment_description
+  management_group_id  = var.management_group_id
+  location             = var.assignment_location
+  display_name         = var.assignment_display_name != null ? var.assignment_display_name : "FinOps: Required Tags"
+  description          = var.assignment_description
 
   non_compliance_message {
     content = var.non_compliance_message != null ? var.non_compliance_message : "Resources must have the following required tags: ${join(", ", [for tag in var.required_tags : tag.name])}"
@@ -142,10 +142,10 @@ resource "azurerm_resource_group_policy_assignment" "tagging" {
 
   name                 = var.assignment_name != null ? var.assignment_name : "finops-tagging-assignment"
   policy_definition_id = azurerm_policy_definition.tagging.id
-  resource_group_id     = var.resource_group_id
-  location              = var.assignment_location
-  display_name          = var.assignment_display_name != null ? var.assignment_display_name : "FinOps: Required Tags"
-  description           = var.assignment_description
+  resource_group_id    = var.resource_group_id
+  location             = var.assignment_location
+  display_name         = var.assignment_display_name != null ? var.assignment_display_name : "FinOps: Required Tags"
+  description          = var.assignment_description
 
   non_compliance_message {
     content = var.non_compliance_message != null ? var.non_compliance_message : "Resources must have the following required tags: ${join(", ", [for tag in var.required_tags : tag.name])}"

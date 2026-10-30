@@ -14,10 +14,10 @@
 resource "azurerm_resource_graph_query" "orphaned_disks" {
   count = var.create_orphaned_disks_query ? 1 : 0
 
-  name             = var.orphaned_disks_query_name
+  name              = var.orphaned_disks_query_name
   resource_group_id = var.resource_group_id
-  type             = var.query_type
-  description      = var.orphaned_disks_query_description
+  type              = var.query_type
+  description       = var.orphaned_disks_query_description
 
   query = var.orphaned_disks_query != null ? var.orphaned_disks_query : <<QUERY
 Resources
@@ -30,10 +30,10 @@ QUERY
 resource "azurerm_resource_graph_query" "orphaned_public_ips" {
   count = var.create_orphaned_public_ips_query ? 1 : 0
 
-  name             = var.orphaned_public_ips_query_name
+  name              = var.orphaned_public_ips_query_name
   resource_group_id = var.resource_group_id
-  type             = var.query_type
-  description      = var.orphaned_public_ips_query_description
+  type              = var.query_type
+  description       = var.orphaned_public_ips_query_description
 
   query = var.orphaned_public_ips_query != null ? var.orphaned_public_ips_query : <<QUERY
 Resources
@@ -46,10 +46,10 @@ QUERY
 resource "azurerm_resource_graph_query" "orphaned_nics" {
   count = var.create_orphaned_nics_query ? 1 : 0
 
-  name             = var.orphaned_nics_query_name
+  name              = var.orphaned_nics_query_name
   resource_group_id = var.resource_group_id
-  type             = var.query_type
-  description      = var.orphaned_nics_query_description
+  type              = var.query_type
+  description       = var.orphaned_nics_query_description
 
   query = var.orphaned_nics_query != null ? var.orphaned_nics_query : <<QUERY
 Resources
@@ -62,10 +62,10 @@ QUERY
 resource "azurerm_resource_graph_query" "orphaned_storage_accounts" {
   count = var.create_orphaned_storage_accounts_query ? 1 : 0
 
-  name             = var.orphaned_storage_accounts_query_name
+  name              = var.orphaned_storage_accounts_query_name
   resource_group_id = var.resource_group_id
-  type             = var.query_type
-  description      = var.orphaned_storage_accounts_query_description
+  type              = var.query_type
+  description       = var.orphaned_storage_accounts_query_description
 
   query = var.orphaned_storage_accounts_query != null ? var.orphaned_storage_accounts_query : <<QUERY
 Resources

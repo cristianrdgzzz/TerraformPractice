@@ -99,11 +99,11 @@ variable "connectivity_configurations" {
   description = "Map of connectivity configurations (hub-and-spoke or mesh)"
   type = map(object({
     topology                        = string # "HubAndSpoke" or "Mesh"
-    network_group_names            = list(string)
+    network_group_names             = list(string)
     group_connectivity              = optional(string, "None") # "None" or "DirectlyConnected"
-    use_hub_gateway                = optional(bool, false)
+    use_hub_gateway                 = optional(bool, false)
     delete_existing_peering_enabled = optional(bool, false)
-    description                    = optional(string)
+    description                     = optional(string)
     hub = optional(object({
       resource_id   = string
       resource_type = string # "Microsoft.Network/virtualNetworks"

@@ -12,7 +12,7 @@ variable "number_example" {
 
 variable "list_example" {
   description = "An example of a list in Terraform"
-  type        = list
+  type        = list(any)
   default     = ["a", "b", "c"]
 }
 
@@ -35,7 +35,7 @@ variable "map_example" {
 
 variable "object_example" {
   description = "An example of a structural type in Terraform"
-  type        = object({
+  type = object({
     name    = string
     age     = number
     tags    = list(string)

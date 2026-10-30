@@ -19,7 +19,7 @@ output "short_upper_names" {
 variable "hero_thousand_faces" {
   description = "map"
   type        = map(string)
-  default     = {
+  default = {
     neo      = "hero"
     trinity  = "love interest"
     morpheus = "mentor"
@@ -31,6 +31,6 @@ output "bios" {
 }
 
 output "upper_roles" {
-  value = {for name, role in var.hero_thousand_faces : upper(name) => upper(role)}
+  value = { for name, role in var.hero_thousand_faces : upper(name) => upper(role) }
 }
 

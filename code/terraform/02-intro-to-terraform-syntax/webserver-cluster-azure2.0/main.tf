@@ -23,12 +23,12 @@ terraform {
       version = "~> 4.0"
     }
   }
-# Configuración del backend para almacenar el estado de Terraform en Azure Storage
-backend "azurerm" {
-    resource_group_name = "rg-terraform-state"
+  # Configuración del backend para almacenar el estado de Terraform en Azure Storage
+  backend "azurerm" {
+    resource_group_name  = "rg-terraform-state"
     storage_account_name = "sttflibro1855"
-    container_name = "tfstate"
-    key = "01-web-server-azure.terraform.tfstate"
+    container_name       = "tfstate"
+    key                  = "01-web-server-azure.terraform.tfstate"
   }
 }
 
@@ -77,6 +77,8 @@ resource "azurerm_resource_group" "main" {
     ManagedBy   = "Terraform"
   }
 }
+
+
 
 # ============================================================================
 # Create Virtual Network (VNet)
@@ -183,6 +185,9 @@ resource "azurerm_subnet_network_security_group_association" "main" {
   network_security_group_id = azurerm_network_security_group.main.id
 }
 
+
+
+###From here start the creation of the VMSS and the autoscaling configuration 
 # ============================================================================
 # Create Virtual Machine Scale Set (VMSS)
 # ============================================================================
@@ -267,6 +272,16 @@ resource "azurerm_linux_virtual_machine_scale_set" "web_servers" {
   }
 }
 
+
+
+
+
+
+
+
+
+
+
 # ============================================================================
 # Configure Autoscaling
 # ============================================================================
@@ -294,6 +309,7 @@ resource "azurerm_monitor_autoscale_setting" "web_servers" {
       default = var.instance_count
     }
 
+
     # Rule to scale out (add instances)
     rule {
       metric_trigger {
@@ -304,6 +320,7 @@ resource "azurerm_monitor_autoscale_setting" "web_servers" {
         time_window        = "PT5M"
         operator           = "GreaterThan"
         threshold          = 70
+        time_aggregation   = "Average"
       }
 
       scale_action {
@@ -324,6 +341,7 @@ resource "azurerm_monitor_autoscale_setting" "web_servers" {
         time_window        = "PT5M"
         operator           = "LessThan"
         threshold          = 30
+        time_aggregation   = "Average"
       }
 
       scale_action {

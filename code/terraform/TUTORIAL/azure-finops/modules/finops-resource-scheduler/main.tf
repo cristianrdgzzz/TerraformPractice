@@ -21,10 +21,10 @@
 resource "azurerm_automation_account" "scheduler" {
   count = var.create_automation_account ? 1 : 0
 
-  name                = var.automation_account_name
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  sku_name            = var.automation_account_sku
+  name                          = var.automation_account_name
+  location                      = var.location
+  resource_group_name           = var.resource_group_name
+  sku_name                      = var.automation_account_sku
   public_network_access_enabled = var.automation_public_network_access
 
   identity {
@@ -81,7 +81,7 @@ resource "azurerm_automation_account" "scheduler" {
 
 # Local values for automation account
 locals {
-  automation_account_name = var.create_automation_account ? azurerm_automation_account.scheduler[0].name : var.existing_automation_account_name
+  automation_account_name                = var.create_automation_account ? azurerm_automation_account.scheduler[0].name : var.existing_automation_account_name
   automation_account_resource_group_name = var.create_automation_account ? var.resource_group_name : var.existing_automation_account_resource_group_name
 }
 

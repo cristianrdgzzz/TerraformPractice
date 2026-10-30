@@ -20,15 +20,15 @@ resource "aws_iam_user" "example" {
 
 resource "aws_iam_policy" "cloudwatch_read_only" {
 
-  name   = "${var.policy_name_prefix}cloudwatch-read-only"
+  name = "${var.policy_name_prefix}cloudwatch-read-only"
 
   policy = data.aws_iam_policy_document.cloudwatch_read_only.json
 }
 
 data "aws_iam_policy_document" "cloudwatch_read_only" {
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "cloudwatch:Describe*",
       "cloudwatch:Get*",
       "cloudwatch:List*"
@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "cloudwatch_read_only" {
 
 resource "aws_iam_policy" "cloudwatch_full_access" {
 
-  name   = "${var.policy_name_prefix}cloudwatch-full-access"
+  name = "${var.policy_name_prefix}cloudwatch-full-access"
 
   policy = data.aws_iam_policy_document.cloudwatch_full_access.json
 }

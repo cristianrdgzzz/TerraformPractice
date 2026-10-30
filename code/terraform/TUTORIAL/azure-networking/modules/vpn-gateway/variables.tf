@@ -24,7 +24,7 @@ variable "vpn_type" {
   description = "VPN type. Options: 'RouteBased' (dynamic routing) or 'PolicyBased' (static routing)"
   type        = string
   default     = "RouteBased"
-  
+
   validation {
     condition     = contains(["RouteBased", "PolicyBased"], var.vpn_type)
     error_message = "VPN type must be either 'RouteBased' or 'PolicyBased'."
@@ -35,7 +35,7 @@ variable "sku" {
   description = "VPN Gateway SKU. Options: 'Basic', 'VpnGw1', 'VpnGw2', 'VpnGw3', 'VpnGw4', 'VpnGw5'"
   type        = string
   default     = "VpnGw2"
-  
+
   validation {
     condition     = contains(["Basic", "VpnGw1", "VpnGw2", "VpnGw3", "VpnGw4", "VpnGw5"], var.sku)
     error_message = "SKU must be one of: Basic, VpnGw1, VpnGw2, VpnGw3, VpnGw4, VpnGw5."
@@ -102,8 +102,8 @@ variable "bgp_settings" {
     }
   EOT
   type = object({
-    asn             = number
-    peer_weight     = optional(number, 0)
+    asn               = number
+    peer_weight       = optional(number, 0)
     peering_addresses = optional(list(string), [])
   })
   default = null
@@ -129,8 +129,8 @@ variable "vpn_client_configuration" {
     }
   EOT
   type = object({
-    address_space         = list(string)
-    root_certificates    = optional(list(object({
+    address_space = list(string)
+    root_certificates = optional(list(object({
       name             = string
       public_cert_data = string
     })), [])
@@ -139,8 +139,8 @@ variable "vpn_client_configuration" {
       thumbprint = string
     })), [])
     radius_server_address = optional(string, null)
-    radius_server_secret   = optional(string, null)
-    vpn_client_protocols   = optional(list(string), ["OpenVPN", "IkeV2"])
+    radius_server_secret  = optional(string, null)
+    vpn_client_protocols  = optional(list(string), ["OpenVPN", "IkeV2"])
   })
   default = null
 }

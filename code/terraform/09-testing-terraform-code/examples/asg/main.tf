@@ -16,7 +16,7 @@ provider "aws" {
 module "asg" {
   source = "../../modules/cluster/asg-rolling-deploy"
 
-  cluster_name  = var.cluster_name
+  cluster_name = var.cluster_name
 
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"

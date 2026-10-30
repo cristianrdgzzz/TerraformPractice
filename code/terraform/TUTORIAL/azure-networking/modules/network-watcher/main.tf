@@ -27,7 +27,7 @@ resource "azurerm_network_watcher" "main" {
   name                = var.network_watcher_name != null ? var.network_watcher_name : "NetworkWatcher_${replace(var.location, " ", "")}"
   location            = var.location
   resource_group_name = var.resource_group_name
-  
+
   tags = var.tags
 }
 
@@ -47,7 +47,7 @@ resource "azurerm_network_watcher" "main" {
 # ----------------------------------------------------------------------------
 resource "azurerm_network_watcher_flow_log" "main" {
   for_each = var.enable_flow_logs ? var.flow_logs : {}
-  
+
   name                      = each.key
   network_watcher_name      = azurerm_network_watcher.main.name
   resource_group_name       = var.resource_group_name
@@ -58,7 +58,7 @@ resource "azurerm_network_watcher_flow_log" "main" {
     enabled = each.value.retention_days > 0
     days    = each.value.retention_days
   }
-  
+
   # Traffic Analytics (optional)
   dynamic "traffic_analytics" {
     for_each = each.value.traffic_analytics != null ? [each.value.traffic_analytics] : []
@@ -70,7 +70,7 @@ resource "azurerm_network_watcher_flow_log" "main" {
       interval_in_minutes   = traffic_analytics.value.interval_in_minutes
     }
   }
-  
+
   tags = merge(var.tags, each.value.tags)
 }
 
@@ -97,7 +97,7 @@ resource "azurerm_network_connection_monitor" "main" {
   # Source endpoint
   endpoint {
     name = "${each.key}-source"
-    
+
     target_resource_id = each.value.source.virtual_machine_id
     address            = each.value.source.address
   }

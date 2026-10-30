@@ -15,7 +15,7 @@
 
 terraform {
   required_version = ">= 1.0"
-  
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -37,7 +37,7 @@ provider "azurerm" {
 resource "azurerm_resource_group" "main" {
   name     = "rg-multi-tier-app"
   location = "eastus"
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -51,12 +51,12 @@ resource "azurerm_resource_group" "main" {
 # ----------------------------------------------------------------------------
 module "vnet" {
   source = "../../modules/networking"
-  
+
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   vnet_name           = "vnet-multi-tier"
   address_space       = ["10.0.0.0/16"]
-  
+
   subnets = {
     "appgw-subnet" = {
       address_prefixes = ["10.0.1.0/24"]
@@ -75,7 +75,7 @@ module "vnet" {
       address_prefixes = ["10.0.5.0/24"]
     }
   }
-  
+
   network_security_groups = {
     "web-nsg" = {
       rules = [
@@ -137,7 +137,7 @@ module "vnet" {
       associate_to_subnets = ["db-subnet"]
     }
   }
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -153,7 +153,7 @@ resource "azurerm_public_ip" "appgw" {
   resource_group_name = azurerm_resource_group.main.name
   allocation_method   = "Static"
   sku                 = "Standard"
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -168,32 +168,32 @@ resource "azurerm_public_ip" "appgw" {
 # ----------------------------------------------------------------------------
 module "app_gateway" {
   source = "../../modules/application-gateway"
-  
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
+
+  resource_group_name      = azurerm_resource_group.main.name
+  location                 = azurerm_resource_group.main.location
   application_gateway_name = "appgw-multi-tier"
-  
+
   sku_name     = "WAF_v2"
   sku_tier     = "WAF_v2"
-  sku_capacity = null  # Autoscaling
-  
+  sku_capacity = null # Autoscaling
+
   autoscale_configuration = {
     min_capacity = 2
     max_capacity = 10
   }
-  
+
   gateway_ip_configuration = {
     name      = "appgw-ip-config"
     subnet_id = module.vnet.subnet_ids["appgw-subnet"]
   }
-  
+
   frontend_ip_configurations = [
     {
       name                 = "public-frontend"
       public_ip_address_id = azurerm_public_ip.appgw.id
     }
   ]
-  
+
   frontend_ports = [
     {
       name = "http-port"
@@ -204,15 +204,15 @@ module "app_gateway" {
       port = 443
     }
   ]
-  
+
   backend_address_pools = [
     {
       name         = "web-backend"
-      ip_addresses = ["10.0.2.10", "10.0.2.11"]  # Web tier VMs
+      ip_addresses = ["10.0.2.10", "10.0.2.11"] # Web tier VMs
       fqdns        = []
     }
   ]
-  
+
   backend_http_settings = [
     {
       name                                = "http-setting"
@@ -225,7 +225,7 @@ module "app_gateway" {
       pick_host_name_from_backend_address = true
     }
   ]
-  
+
   http_listeners = [
     {
       name                           = "http-listener"
@@ -234,17 +234,17 @@ module "app_gateway" {
       protocol                       = "Http"
     }
   ]
-  
+
   request_routing_rules = [
     {
-      name                        = "http-rule"
-      rule_type                   = "Basic"
-      http_listener_name          = "http-listener"
-      backend_address_pool_name   = "web-backend"
-      backend_http_settings_name  = "http-setting"
+      name                       = "http-rule"
+      rule_type                  = "Basic"
+      http_listener_name         = "http-listener"
+      backend_address_pool_name  = "web-backend"
+      backend_http_settings_name = "http-setting"
     }
   ]
-  
+
   probes = [
     {
       name                                      = "http-probe"
@@ -259,7 +259,7 @@ module "app_gateway" {
       }
     }
   ]
-  
+
   waf_configuration = {
     enabled                  = true
     firewall_mode            = "Prevention"
@@ -267,9 +267,9 @@ module "app_gateway" {
     rule_set_version         = "3.2"
     file_upload_limit_mb     = 100
     max_request_body_size_kb = 128
-    request_body_check        = true
+    request_body_check       = true
   }
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -285,7 +285,7 @@ resource "azurerm_public_ip" "lb" {
   resource_group_name = azurerm_resource_group.main.name
   allocation_method   = "Static"
   sku                 = "Standard"
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -300,27 +300,27 @@ resource "azurerm_public_ip" "lb" {
 # ----------------------------------------------------------------------------
 module "load_balancer" {
   source = "../../modules/load-balancer"
-  
+
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   load_balancer_name  = "lb-multi-tier"
-  
+
   sku      = "Standard"
   sku_tier = "Regional"
-  
+
   frontend_ip_configurations = [
     {
       name                 = "public-frontend"
       public_ip_address_id = azurerm_public_ip.lb.id
     }
   ]
-  
+
   backend_address_pools = [
     {
       name = "app-backend"
     }
   ]
-  
+
   probes = [
     {
       name                = "tcp-probe"
@@ -330,7 +330,7 @@ module "load_balancer" {
       number_of_probes    = 2
     }
   ]
-  
+
   load_balancing_rules = [
     {
       name                           = "app-rule"
@@ -338,13 +338,13 @@ module "load_balancer" {
       frontend_port                  = 8080
       backend_port                   = 8080
       frontend_ip_configuration_name = "public-frontend"
-      backend_address_pool_name     = "app-backend"
+      backend_address_pool_name      = "app-backend"
       probe_name                     = "tcp-probe"
       idle_timeout_in_minutes        = 4
       load_distribution              = "Default"
     }
   ]
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -360,7 +360,7 @@ resource "azurerm_public_ip" "nat_gateway" {
   resource_group_name = azurerm_resource_group.main.name
   allocation_method   = "Static"
   sku                 = "Standard"
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -375,14 +375,14 @@ resource "azurerm_public_ip" "nat_gateway" {
 # ----------------------------------------------------------------------------
 module "nat_gateway" {
   source = "../../modules/nat-gateway"
-  
+
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
-  nat_gateway_name     = "nat-multi-tier"
-  
+  nat_gateway_name    = "nat-multi-tier"
+
   # Public IP IDs (must be Standard SKU)
   public_ip_address_ids = [azurerm_public_ip.nat_gateway.id]
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"

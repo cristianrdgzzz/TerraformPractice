@@ -24,7 +24,7 @@ variable "sku" {
   description = "Firewall Policy SKU. Options: 'Standard' or 'Premium'"
   type        = string
   default     = "Standard"
-  
+
   validation {
     condition     = contains(["Standard", "Premium"], var.sku)
     error_message = "SKU must be either 'Standard' or 'Premium'."
@@ -35,7 +35,7 @@ variable "threat_intelligence_mode" {
   description = "Threat Intelligence mode. Options: 'Off', 'Alert', 'Deny'"
   type        = string
   default     = "Alert"
-  
+
   validation {
     condition     = contains(["Off", "Alert", "Deny"], var.threat_intelligence_mode)
     error_message = "Threat Intelligence mode must be one of: Off, Alert, Deny."
@@ -60,13 +60,13 @@ variable "dns_settings" {
     }
   EOT
   type = object({
-    servers                 = optional(list(string), [])
-    proxy_enabled           = optional(bool, false)
+    servers                   = optional(list(string), [])
+    proxy_enabled             = optional(bool, false)
     network_rule_fqdn_enabled = optional(bool, false)
   })
   default = {
-    servers                 = []
-    proxy_enabled           = false
+    servers                   = []
+    proxy_enabled             = false
     network_rule_fqdn_enabled = false
   }
 }
@@ -140,8 +140,8 @@ variable "rule_collection_groups" {
         source_addresses    = list(string)
         destination_address = string
         destination_ports   = list(string)
-        translated_address = string
-        translated_port    = number
+        translated_address  = string
+        translated_port     = number
       }))
     })), [])
   }))

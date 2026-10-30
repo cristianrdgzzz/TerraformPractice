@@ -52,11 +52,11 @@ output "subnet_details" {
   description = "Detailed information about all subnets"
   value = {
     for k, v in azurerm_subnet.main : k => {
-      id                      = v.id
-      name                    = v.name
-      address_prefixes        = v.address_prefixes
-      service_endpoints       = v.service_endpoints
-      has_delegation         = v.delegation != null && length(v.delegation) > 0
+      id                = v.id
+      name              = v.name
+      address_prefixes  = v.address_prefixes
+      service_endpoints = v.service_endpoints
+      has_delegation    = v.delegation != null && length(v.delegation) > 0
     }
   }
 }

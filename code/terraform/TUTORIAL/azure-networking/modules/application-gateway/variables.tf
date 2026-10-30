@@ -49,7 +49,7 @@ variable "sku_tier" {
   description = "SKU tier. Options: 'Standard', 'Standard_v2', 'WAF', 'WAF_v2'"
   type        = string
   default     = "Standard_v2"
-  
+
   validation {
     condition     = contains(["Standard", "Standard_v2", "WAF", "WAF_v2"], var.sku_tier)
     error_message = "SKU tier must be one of: Standard, Standard_v2, WAF, WAF_v2."
@@ -65,7 +65,7 @@ variable "sku_capacity" {
   description = "Number of instances (1-125). For autoscaling, set to null."
   type        = number
   default     = 2
-  
+
   validation {
     condition     = var.sku_capacity == null || (var.sku_capacity >= 1 && var.sku_capacity <= 125)
     error_message = "SKU capacity must be between 1 and 125, or null for autoscaling."
@@ -182,7 +182,7 @@ variable "backend_address_pools" {
     ip_addresses = list(string)
     fqdns        = list(string)
   }))
-  
+
   default = []
 }
 
@@ -220,15 +220,15 @@ variable "backend_http_settings" {
     host_name                           = optional(string, null)
     pick_host_name_from_backend_address = optional(bool, false)
     affinity_cookie_name                = optional(string, null)
-    authentication_certificate          = optional(object({
+    authentication_certificate = optional(object({
       name = string
     }), null)
-    connection_draining                 = optional(object({
+    connection_draining = optional(object({
       enabled           = bool
       drain_timeout_sec = number
     }), null)
   }))
-  
+
   default = []
 }
 
@@ -274,7 +274,7 @@ variable "http_listeners" {
     ssl_certificate_name           = optional(string, null)
     firewall_policy_id             = optional(string, null)
   }))
-  
+
   default = []
 }
 
@@ -325,7 +325,7 @@ variable "request_routing_rules" {
     rewrite_rule_set_name       = optional(string, null)
     priority                    = optional(number, null)
   }))
-  
+
   default = []
 }
 
@@ -363,12 +363,12 @@ variable "probes" {
     unhealthy_threshold                       = number
     pick_host_name_from_backend_http_settings = optional(bool, true)
     minimum_servers                           = optional(number, 0)
-    match                                     = optional(object({
+    match = optional(object({
       status_code = list(string)
       body        = optional(string, null)
     }), null)
   }))
-  
+
   default = []
 }
 
@@ -393,7 +393,7 @@ variable "ssl_certificates" {
     data                = optional(string, null) # Base64 encoded PFX
     password            = optional(string, null) # PFX password
   }))
-  
+
   default = []
 }
 
@@ -425,11 +425,11 @@ variable "waf_configuration" {
     file_upload_limit_mb     = optional(number, 100)
     max_request_body_size_kb = optional(number, 128)
     request_body_check       = optional(bool, true)
-    disabled_rule_groups     = optional(list(object({
+    disabled_rule_groups = optional(list(object({
       rule_group_name = string
       rules           = optional(list(number), [])
     })), null)
-    exclusions               = optional(list(object({
+    exclusions = optional(list(object({
       match_variable          = string
       selector_match_operator = optional(string, null)
       selector                = optional(string, null)
@@ -448,7 +448,7 @@ variable "public_ip_allocation_method" {
   description = "Allocation method for the public IP. Options: 'Static' or 'Dynamic'"
   type        = string
   default     = "Static"
-  
+
   validation {
     condition     = contains(["Static", "Dynamic"], var.public_ip_allocation_method)
     error_message = "Public IP allocation method must be 'Static' or 'Dynamic'."
@@ -459,7 +459,7 @@ variable "public_ip_sku" {
   description = "SKU for the public IP. Options: 'Basic' or 'Standard'"
   type        = string
   default     = "Standard"
-  
+
   validation {
     condition     = contains(["Basic", "Standard"], var.public_ip_sku)
     error_message = "Public IP SKU must be 'Basic' or 'Standard'."

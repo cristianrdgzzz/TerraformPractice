@@ -10,13 +10,13 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east"    # Default AWS Europe account: eu-north-1
-} 
+  region = "us-east" # Default AWS Europe account: eu-north-1
+}
 
 # IMPORTANT: this ami is not available on eu-north-1
 
 resource "aws_instance" "example" {
   ami           = "ami-0fb653ca2d3203ac1"
-  instance_type = "t3.micro"  # Change from t2.micro to t3.micro (free plan)
+  instance_type = "t3.micro" # Change from t2.micro to t3.micro (free plan)
 }
 

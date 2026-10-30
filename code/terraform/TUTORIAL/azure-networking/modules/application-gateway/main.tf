@@ -27,7 +27,7 @@
 # ----------------------------------------------------------------------------
 resource "azurerm_public_ip" "main" {
   count = var.public_ip_enabled ? 1 : 0
-  
+
   name                = "${var.application_gateway_name}-pip"
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -35,7 +35,7 @@ resource "azurerm_public_ip" "main" {
   sku                 = var.public_ip_sku
   zones               = var.zones
   domain_name_label   = var.public_ip_domain_name_label
-  
+
   tags = var.tags
 }
 
@@ -73,7 +73,7 @@ resource "azurerm_application_gateway" "main" {
   name                = var.application_gateway_name
   location            = var.location
   resource_group_name = var.resource_group_name
-  
+
   # SKU Configuration
   # V2 SKU (Standard_v2, WAF_v2) is recommended:
   # - Autoscaling support
@@ -83,9 +83,9 @@ resource "azurerm_application_gateway" "main" {
   sku {
     name     = var.sku_name
     tier     = var.sku_tier
-    capacity = var.sku_capacity  # null for autoscaling (v2 only), number for manual scaling
+    capacity = var.sku_capacity # null for autoscaling (v2 only), number for manual scaling
   }
-  
+
   # Autoscale Configuration (v2 SKU only)
   # Autoscaling is recommended for cost optimization:
   # - Automatically scales based on application traffic
@@ -98,13 +98,13 @@ resource "azurerm_application_gateway" "main" {
       max_capacity = autoscale_configuration.value.max_capacity
     }
   }
-  
+
   # Gateway IP Configuration (Subnet)
   gateway_ip_configuration {
     name      = var.gateway_ip_configuration.name
     subnet_id = var.gateway_ip_configuration.subnet_id
   }
-  
+
   # Frontend IP Configuration
   dynamic "frontend_ip_configuration" {
     for_each = var.frontend_ip_configurations
@@ -115,7 +115,7 @@ resource "azurerm_application_gateway" "main" {
       subnet_id            = frontend_ip_configuration.value.subnet_id
     }
   }
-  
+
   # Frontend Ports
   dynamic "frontend_port" {
     for_each = var.frontend_ports
@@ -124,7 +124,7 @@ resource "azurerm_application_gateway" "main" {
       port = frontend_port.value.port
     }
   }
-  
+
   # Backend Address Pools
   dynamic "backend_address_pool" {
     for_each = var.backend_address_pools
@@ -134,7 +134,7 @@ resource "azurerm_application_gateway" "main" {
       fqdns        = backend_address_pool.value.fqdns
     }
   }
-  
+
   # Backend HTTP Settings
   # Load Balancing: Application Gateway uses round-robin algorithm by default
   # Session Affinity: Enable only when required for stateful applications
@@ -152,7 +152,7 @@ resource "azurerm_application_gateway" "main" {
       probe_name                          = backend_http_settings.value.probe_name
       host_name                           = backend_http_settings.value.host_name
       pick_host_name_from_backend_address = backend_http_settings.value.pick_host_name_from_backend_address
-      
+
       # Authentication Certificate (for mutual TLS)
       dynamic "authentication_certificate" {
         for_each = backend_http_settings.value.authentication_certificate != null ? [backend_http_settings.value.authentication_certificate] : []
@@ -160,7 +160,7 @@ resource "azurerm_application_gateway" "main" {
           name = authentication_certificate.value.name
         }
       }
-      
+
       # Connection Draining
       connection_draining {
         enabled           = backend_http_settings.value.connection_draining != null ? backend_http_settings.value.connection_draining.enabled : false
@@ -168,7 +168,7 @@ resource "azurerm_application_gateway" "main" {
       }
     }
   }
-  
+
   # HTTP Listeners
   dynamic "http_listener" {
     for_each = var.http_listeners
@@ -184,7 +184,7 @@ resource "azurerm_application_gateway" "main" {
       require_sni                    = http_listener.value.require_sni
     }
   }
-  
+
   # Request Routing Rules
   dynamic "request_routing_rule" {
     for_each = var.request_routing_rules
@@ -200,7 +200,7 @@ resource "azurerm_application_gateway" "main" {
       priority                    = request_routing_rule.value.priority
     }
   }
-  
+
   # Probes (Health Checks)
   # Health Probe Best Practices:
   # - Use dedicated health check endpoint (e.g., /health)
@@ -220,7 +220,7 @@ resource "azurerm_application_gateway" "main" {
       unhealthy_threshold                       = probe.value.unhealthy_threshold
       pick_host_name_from_backend_http_settings = probe.value.pick_host_name_from_backend_http_settings
       minimum_servers                           = probe.value.minimum_servers
-      
+
       # Match Configuration
       dynamic "match" {
         for_each = probe.value.match != null ? [probe.value.match] : []
@@ -231,7 +231,7 @@ resource "azurerm_application_gateway" "main" {
       }
     }
   }
-  
+
   # SSL Certificates
   dynamic "ssl_certificate" {
     for_each = var.ssl_certificates
@@ -242,7 +242,7 @@ resource "azurerm_application_gateway" "main" {
       key_vault_secret_id = ssl_certificate.value.key_vault_secret_id
     }
   }
-  
+
   # Web Application Firewall Configuration (WAF SKU only)
   # WAF Best Practices:
   # - Use WAF_v2 SKU for production web applications
@@ -259,7 +259,7 @@ resource "azurerm_application_gateway" "main" {
       file_upload_limit_mb     = waf_configuration.value.file_upload_limit_mb
       request_body_check       = waf_configuration.value.request_body_check
       max_request_body_size_kb = waf_configuration.value.max_request_body_size_kb
-      
+
       # Disabled Rule Groups
       dynamic "disabled_rule_group" {
         for_each = waf_configuration.value.disabled_rule_groups != null ? waf_configuration.value.disabled_rule_groups : []
@@ -268,7 +268,7 @@ resource "azurerm_application_gateway" "main" {
           rules           = disabled_rule_group.value.rules
         }
       }
-      
+
       # Exclusion Rules
       dynamic "exclusion" {
         for_each = waf_configuration.value.exclusions != null ? waf_configuration.value.exclusions : []
@@ -280,7 +280,7 @@ resource "azurerm_application_gateway" "main" {
       }
     }
   }
-  
+
   # Identity (for Key Vault integration)
   dynamic "identity" {
     for_each = var.identity != null ? [var.identity] : []
@@ -289,14 +289,14 @@ resource "azurerm_application_gateway" "main" {
       identity_ids = identity.value.identity_ids
     }
   }
-  
+
   # Zones (for zone redundancy)
   # Zone redundancy is available in V2 SKU:
   # - Deploy across availability zones for high availability
   # - Provides protection against zone-level failures
   # - Recommended for production workloads
   zones = var.zones
-  
+
   tags = var.tags
 }
 

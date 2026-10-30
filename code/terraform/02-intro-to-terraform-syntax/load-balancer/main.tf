@@ -77,7 +77,7 @@ resource "aws_security_group" "alb" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"            # Any protocol
+    protocol    = "-1" # Any protocol
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -100,7 +100,7 @@ resource "aws_lb" "example" {
 
   # Type of load balancer (application, network, or gateway)
   # Application Load Balancer is ideal for web applications
-  load_balancer_type = "application"    
+  load_balancer_type = "application"
 
   # Subnets where the ALB will run
   # Using all subnets in the Default VPC ensures multi-AZ deployment

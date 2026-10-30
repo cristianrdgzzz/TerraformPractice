@@ -78,9 +78,9 @@ resource "kubernetes_service" "app" {
   }
 
   spec {
-    type = "LoadBalancer"                   # Elastic LB , Cloud LB, etc depending on cloud provider
+    type = "LoadBalancer" # Elastic LB , Cloud LB, etc depending on cloud provider
     port {
-      port        = 80                      # Listening port on LB
+      port        = 80 # Listening port on LB
       target_port = var.container_port
       protocol    = "TCP"
     }
@@ -90,6 +90,6 @@ resource "kubernetes_service" "app" {
     # pod_labels , the Service and the Deployment will both operate on
     # the same P
 
-    selector = local.pod_labels             
+    selector = local.pod_labels
   }
 }

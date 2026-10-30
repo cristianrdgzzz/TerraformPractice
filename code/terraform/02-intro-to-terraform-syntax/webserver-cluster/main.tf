@@ -111,7 +111,7 @@ resource "aws_security_group" "alb" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Open to internet
+    cidr_blocks = ["0.0.0.0/0"] # Open to internet
   }
 
   # INBOUND: HTTPS from public internet (for future use)
@@ -120,7 +120,7 @@ resource "aws_security_group" "alb" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Open to internet
+    cidr_blocks = ["0.0.0.0/0"] # Open to internet
   }
 
   # OUTBOUND: All traffic to anywhere
@@ -131,8 +131,8 @@ resource "aws_security_group" "alb" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"           # -1 means all protocols
-    cidr_blocks = ["0.0.0.0/0"]  # To anywhere
+    protocol    = "-1"          # -1 means all protocols
+    cidr_blocks = ["0.0.0.0/0"] # To anywhere
   }
 
   tags = {
@@ -172,7 +172,7 @@ resource "aws_security_group" "instance" {
     from_port       = var.server_port
     to_port         = var.server_port
     protocol        = "tcp"
-    security_groups = [aws_security_group.alb.id]  # Only from ALB
+    security_groups = [aws_security_group.alb.id] # Only from ALB
   }
 
   # OUTBOUND: All traffic to anywhere
@@ -184,8 +184,8 @@ resource "aws_security_group" "instance" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"           # -1 means all protocols
-    cidr_blocks = ["0.0.0.0/0"]  # To anywhere
+    protocol    = "-1"          # -1 means all protocols
+    cidr_blocks = ["0.0.0.0/0"] # To anywhere
   }
 
   tags = {
@@ -198,9 +198,9 @@ resource "aws_security_group" "instance" {
 # ============================================================================
 
 resource "aws_launch_template" "example" {
-  name_prefix = "terraform-webserver-"
-  description = "Launch template for web server instances in ASG with ALB"
-  image_id    = var.ami_id
+  name_prefix   = "terraform-webserver-"
+  description   = "Launch template for web server instances in ASG with ALB"
+  image_id      = var.ami_id
   instance_type = var.instance_type
 
   network_interfaces {
@@ -243,8 +243,8 @@ resource "aws_autoscaling_group" "example" {
   max_size         = var.max_size
   desired_capacity = var.desired_capacity
 
-  target_group_arns       = [aws_lb_target_group.asg.arn]
-  health_check_type      = "ELB"
+  target_group_arns         = [aws_lb_target_group.asg.arn]
+  health_check_type         = "ELB"
   health_check_grace_period = 30
 
   tag {

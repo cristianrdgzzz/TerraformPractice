@@ -119,7 +119,7 @@ variable "email_receivers" {
   description = "List of email receivers for the Action Group."
   type = list(object({
     name                    = string
-    email_address          = string
+    email_address           = string
     use_common_alert_schema = optional(bool, false)
   }))
   default = []
@@ -141,7 +141,7 @@ variable "webhook_receivers" {
   description = "List of webhook receivers for the Action Group (e.g., Slack, Teams, PagerDuty)."
   type = list(object({
     name                    = string
-    service_uri            = string
+    service_uri             = string
     use_common_alert_schema = optional(bool, false)
     aad_auth = object({
       object_id      = string

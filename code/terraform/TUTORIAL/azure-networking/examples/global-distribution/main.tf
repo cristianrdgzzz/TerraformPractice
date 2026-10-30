@@ -16,7 +16,7 @@
 
 terraform {
   required_version = ">= 1.0"
-  
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -38,7 +38,7 @@ provider "azurerm" {
 resource "azurerm_resource_group" "eastus" {
   name     = "rg-global-eastus"
   location = "eastus"
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -49,7 +49,7 @@ resource "azurerm_resource_group" "eastus" {
 resource "azurerm_resource_group" "westeurope" {
   name     = "rg-global-westeurope"
   location = "westeurope"
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -66,7 +66,7 @@ resource "azurerm_public_ip" "appgw_eastus" {
   resource_group_name = azurerm_resource_group.eastus.name
   allocation_method   = "Static"
   sku                 = "Standard"
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -79,7 +79,7 @@ resource "azurerm_public_ip" "appgw_westeurope" {
   resource_group_name = azurerm_resource_group.westeurope.name
   allocation_method   = "Static"
   sku                 = "Standard"
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -91,12 +91,12 @@ resource "azurerm_public_ip" "appgw_westeurope" {
 # ----------------------------------------------------------------------------
 module "vnet_eastus" {
   source = "../../modules/networking"
-  
+
   resource_group_name = azurerm_resource_group.eastus.name
   location            = azurerm_resource_group.eastus.location
   vnet_name           = "vnet-global-eastus"
   address_space       = ["10.1.0.0/16"]
-  
+
   subnets = {
     "appgw-subnet" = {
       address_prefixes = ["10.1.1.0/24"]
@@ -105,7 +105,7 @@ module "vnet_eastus" {
       address_prefixes = ["10.1.2.0/24"]
     }
   }
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -115,12 +115,12 @@ module "vnet_eastus" {
 
 module "vnet_westeurope" {
   source = "../../modules/networking"
-  
+
   resource_group_name = azurerm_resource_group.westeurope.name
   location            = azurerm_resource_group.westeurope.location
   vnet_name           = "vnet-global-westeurope"
   address_space       = ["10.2.0.0/16"]
-  
+
   subnets = {
     "appgw-subnet" = {
       address_prefixes = ["10.2.1.0/24"]
@@ -129,7 +129,7 @@ module "vnet_westeurope" {
       address_prefixes = ["10.2.2.0/24"]
     }
   }
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -142,39 +142,39 @@ module "vnet_westeurope" {
 # ----------------------------------------------------------------------------
 module "app_gateway_eastus" {
   source = "../../modules/application-gateway"
-  
-  resource_group_name = azurerm_resource_group.eastus.name
-  location            = azurerm_resource_group.eastus.location
+
+  resource_group_name      = azurerm_resource_group.eastus.name
+  location                 = azurerm_resource_group.eastus.location
   application_gateway_name = "appgw-eastus"
-  
+
   sku_name     = "Standard_v2"
   sku_tier     = "Standard_v2"
   sku_capacity = null
-  
+
   autoscale_configuration = {
     min_capacity = 2
     max_capacity = 10
   }
-  
+
   gateway_ip_configuration = {
     name      = "appgw-ip-config"
     subnet_id = module.vnet_eastus.subnet_ids["appgw-subnet"]
   }
-  
+
   frontend_ip_configurations = [
     {
       name                 = "public-frontend"
       public_ip_address_id = azurerm_public_ip.appgw_eastus.id
     }
   ]
-  
+
   frontend_ports = [
     {
       name = "http-port"
       port = 80
     }
   ]
-  
+
   backend_address_pools = [
     {
       name         = "web-backend"
@@ -182,7 +182,7 @@ module "app_gateway_eastus" {
       fqdns        = []
     }
   ]
-  
+
   backend_http_settings = [
     {
       name                                = "http-setting"
@@ -195,7 +195,7 @@ module "app_gateway_eastus" {
       pick_host_name_from_backend_address = true
     }
   ]
-  
+
   http_listeners = [
     {
       name                           = "http-listener"
@@ -204,17 +204,17 @@ module "app_gateway_eastus" {
       protocol                       = "Http"
     }
   ]
-  
+
   request_routing_rules = [
     {
-      name                        = "http-rule"
-      rule_type                   = "Basic"
-      http_listener_name          = "http-listener"
-      backend_address_pool_name   = "web-backend"
-      backend_http_settings_name  = "http-setting"
+      name                       = "http-rule"
+      rule_type                  = "Basic"
+      http_listener_name         = "http-listener"
+      backend_address_pool_name  = "web-backend"
+      backend_http_settings_name = "http-setting"
     }
   ]
-  
+
   probes = [
     {
       name                                      = "http-probe"
@@ -229,7 +229,7 @@ module "app_gateway_eastus" {
       }
     }
   ]
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -239,39 +239,39 @@ module "app_gateway_eastus" {
 
 module "app_gateway_westeurope" {
   source = "../../modules/application-gateway"
-  
-  resource_group_name = azurerm_resource_group.westeurope.name
-  location            = azurerm_resource_group.westeurope.location
+
+  resource_group_name      = azurerm_resource_group.westeurope.name
+  location                 = azurerm_resource_group.westeurope.location
   application_gateway_name = "appgw-westeurope"
-  
+
   sku_name     = "Standard_v2"
   sku_tier     = "Standard_v2"
   sku_capacity = null
-  
+
   autoscale_configuration = {
     min_capacity = 2
     max_capacity = 10
   }
-  
+
   gateway_ip_configuration = {
     name      = "appgw-ip-config"
     subnet_id = module.vnet_westeurope.subnet_ids["appgw-subnet"]
   }
-  
+
   frontend_ip_configurations = [
     {
       name                 = "public-frontend"
       public_ip_address_id = azurerm_public_ip.appgw_westeurope.id
     }
   ]
-  
+
   frontend_ports = [
     {
       name = "http-port"
       port = 80
     }
   ]
-  
+
   backend_address_pools = [
     {
       name         = "web-backend"
@@ -279,7 +279,7 @@ module "app_gateway_westeurope" {
       fqdns        = []
     }
   ]
-  
+
   backend_http_settings = [
     {
       name                                = "http-setting"
@@ -292,7 +292,7 @@ module "app_gateway_westeurope" {
       pick_host_name_from_backend_address = true
     }
   ]
-  
+
   http_listeners = [
     {
       name                           = "http-listener"
@@ -301,17 +301,17 @@ module "app_gateway_westeurope" {
       protocol                       = "Http"
     }
   ]
-  
+
   request_routing_rules = [
     {
-      name                        = "http-rule"
-      rule_type                   = "Basic"
-      http_listener_name          = "http-listener"
-      backend_address_pool_name   = "web-backend"
-      backend_http_settings_name  = "http-setting"
+      name                       = "http-rule"
+      rule_type                  = "Basic"
+      http_listener_name         = "http-listener"
+      backend_address_pool_name  = "web-backend"
+      backend_http_settings_name = "http-setting"
     }
   ]
-  
+
   probes = [
     {
       name                                      = "http-probe"
@@ -326,7 +326,7 @@ module "app_gateway_westeurope" {
       }
     }
   ]
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -341,34 +341,34 @@ module "app_gateway_westeurope" {
 # ----------------------------------------------------------------------------
 module "traffic_manager" {
   source = "../../modules/traffic-manager"
-  
+
   resource_group_name = azurerm_resource_group.eastus.name
   location            = "global"
-  
+
   traffic_manager_profile_name = "tm-global-app"
-  traffic_routing_method        = "Priority"  # Failover routing
-  
+  traffic_routing_method       = "Priority" # Failover routing
+
   dns_config = {
     relative_name = "global-app"
     ttl           = 60
   }
-  
+
   monitor_config = {
     protocol                     = "HTTPS"
     port                         = 443
     path                         = "/health"
-    interval_in_seconds           = 30
-    timeout_in_seconds            = 10
+    interval_in_seconds          = 30
+    timeout_in_seconds           = 10
     tolerated_number_of_failures = 3
-    expected_status_code_ranges   = ["200-299"]
+    expected_status_code_ranges  = ["200-299"]
   }
-  
+
   endpoints = [
     {
       name               = "eastus-endpoint"
       type               = "azureEndpoints"
       target_resource_id = azurerm_public_ip.appgw_eastus.id
-      priority           = 1  # Primary
+      priority           = 1 # Primary
       weight             = null
       enabled            = true
     },
@@ -376,12 +376,12 @@ module "traffic_manager" {
       name               = "westeurope-endpoint"
       type               = "azureEndpoints"
       target_resource_id = azurerm_public_ip.appgw_westeurope.id
-      priority           = 2  # Secondary (failover)
+      priority           = 2 # Secondary (failover)
       weight             = null
       enabled            = true
     }
   ]
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -395,21 +395,21 @@ module "traffic_manager" {
 # ----------------------------------------------------------------------------
 module "cdn" {
   source = "../../modules/cdn"
-  
+
   resource_group_name = azurerm_resource_group.eastus.name
   location            = "global"
-  
+
   cdn_profile_name = "cdn-global-app"
   sku              = "Standard_Microsoft"
-  
+
   cdn_endpoints = {
     "static-assets" = {
-      name                = "cdn-static"
-      origin_host_header  = null
+      name               = "cdn-static"
+      origin_host_header = null
       origins = [
         {
           name       = "storage-origin"
-          host_name  = "storageaccount.blob.core.windows.net"  # Replace with your storage account
+          host_name  = "storageaccount.blob.core.windows.net" # Replace with your storage account
           http_port  = 80
           https_port = 443
         }
@@ -422,7 +422,7 @@ module "cdn" {
       optimization_type             = "GeneralWebDelivery"
     }
   }
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -438,15 +438,15 @@ module "cdn" {
 # ----------------------------------------------------------------------------
 module "front_door" {
   source = "../../modules/front-door"
-  
+
   resource_group_name = azurerm_resource_group.eastus.name
   location            = "global"
-  
+
   front_door_name = "fd-global-app"
   friendly_name   = "Global Application Front Door"
-  
+
   load_balancer_enabled = true
-  
+
   backend_pools = [
     {
       name                = "eastus-backend"
@@ -481,7 +481,7 @@ module "front_door" {
       ]
     }
   ]
-  
+
   backend_pool_health_probes = [
     {
       name                = "http-probe"
@@ -491,7 +491,7 @@ module "front_door" {
       enabled             = true
     }
   ]
-  
+
   backend_pool_load_balancing = [
     {
       name                            = "lb-settings"
@@ -500,23 +500,23 @@ module "front_door" {
       additional_latency_milliseconds = 0
     }
   ]
-  
+
   frontend_endpoints = [
     {
       name                                    = "www-endpoint"
-      host_name                               = "www.example.com"  # Replace with your domain
+      host_name                               = "www.example.com" # Replace with your domain
       session_affinity_enabled                = false
       session_affinity_ttl_seconds            = 0
       web_application_firewall_policy_link_id = null
     }
   ]
-  
+
   routing_rules = [
     {
       name               = "http-rule"
-      frontend_endpoints  = ["www-endpoint"]
-      accepted_protocols  = ["Http", "Https"]
-      patterns_to_match   = ["/*"]
+      frontend_endpoints = ["www-endpoint"]
+      accepted_protocols = ["Http", "Https"]
+      patterns_to_match  = ["/*"]
       enabled            = true
       route_configuration = {
         forwarding_protocol = "MatchRequest"
@@ -525,7 +525,7 @@ module "front_door" {
       }
     }
   ]
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"

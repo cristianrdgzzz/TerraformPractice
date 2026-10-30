@@ -42,11 +42,11 @@ resource "azurerm_virtual_wan" "main" {
   location            = var.location
   resource_group_name = var.resource_group_name
   type                = var.type
-  
-  allow_branch_to_branch_traffic      = var.allow_branch_to_branch_traffic
-  disable_vpn_encryption              = var.disable_vpn_encryption
-  office365_local_breakout_category   = var.office365_local_breakout_category
-  
+
+  allow_branch_to_branch_traffic    = var.allow_branch_to_branch_traffic
+  disable_vpn_encryption            = var.disable_vpn_encryption
+  office365_local_breakout_category = var.office365_local_breakout_category
+
   tags = var.tags
 }
 
@@ -66,15 +66,15 @@ resource "azurerm_virtual_wan" "main" {
 # ----------------------------------------------------------------------------
 resource "azurerm_virtual_hub" "main" {
   for_each = var.virtual_hubs
-  
-  name                = each.value.name
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  virtual_wan_id      = azurerm_virtual_wan.main.id
-  address_prefix      = each.value.address_prefix
-  sku                 = each.value.sku
+
+  name                   = each.value.name
+  location               = var.location
+  resource_group_name    = var.resource_group_name
+  virtual_wan_id         = azurerm_virtual_wan.main.id
+  address_prefix         = each.value.address_prefix
+  sku                    = each.value.sku
   hub_routing_preference = each.value.hub_routing_preference
-  
+
   tags = merge(var.tags, each.value.tags)
 }
 

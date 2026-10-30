@@ -81,12 +81,12 @@ resource "azurerm_storage_management_policy" "lifecycle" {
         dynamic "base_blob" {
           for_each = rule.value.base_blob != null ? [rule.value.base_blob] : []
           content {
-            tier_to_cool_after_days_since_modification_greater_than    = base_blob.value.tier_to_cool_after_days
-            tier_to_archive_after_days_since_modification_greater_than = base_blob.value.tier_to_archive_after_days
-            delete_after_days_since_modification_greater_than           = base_blob.value.delete_after_days
-            tier_to_cool_after_days_since_last_access_time_greater_than = base_blob.value.tier_to_cool_after_days_since_last_access
+            tier_to_cool_after_days_since_modification_greater_than        = base_blob.value.tier_to_cool_after_days
+            tier_to_archive_after_days_since_modification_greater_than     = base_blob.value.tier_to_archive_after_days
+            delete_after_days_since_modification_greater_than              = base_blob.value.delete_after_days
+            tier_to_cool_after_days_since_last_access_time_greater_than    = base_blob.value.tier_to_cool_after_days_since_last_access
             tier_to_archive_after_days_since_last_access_time_greater_than = base_blob.value.tier_to_archive_after_days_since_last_access
-            delete_after_days_since_last_access_time_greater_than = base_blob.value.delete_after_days_since_last_access
+            delete_after_days_since_last_access_time_greater_than          = base_blob.value.delete_after_days_since_last_access
           }
         }
 
@@ -94,8 +94,8 @@ resource "azurerm_storage_management_policy" "lifecycle" {
         dynamic "snapshot" {
           for_each = rule.value.snapshot != null ? [rule.value.snapshot] : []
           content {
-            delete_after_days_since_creation_greater_than = snapshot.value.delete_after_days_since_creation
-            tier_to_cool_after_days_since_creation_greater_than = snapshot.value.tier_to_cool_after_days_since_creation
+            delete_after_days_since_creation_greater_than          = snapshot.value.delete_after_days_since_creation
+            tier_to_cool_after_days_since_creation_greater_than    = snapshot.value.tier_to_cool_after_days_since_creation
             tier_to_archive_after_days_since_creation_greater_than = snapshot.value.tier_to_archive_after_days_since_creation
           }
         }
@@ -104,8 +104,8 @@ resource "azurerm_storage_management_policy" "lifecycle" {
         dynamic "version" {
           for_each = rule.value.version != null ? [rule.value.version] : []
           content {
-            delete_after_days_since_creation_greater_than = version.value.delete_after_days_since_creation
-            tier_to_cool_after_days_since_creation_greater_than = version.value.tier_to_cool_after_days_since_creation
+            delete_after_days_since_creation_greater_than          = version.value.delete_after_days_since_creation
+            tier_to_cool_after_days_since_creation_greater_than    = version.value.tier_to_cool_after_days_since_creation
             tier_to_archive_after_days_since_creation_greater_than = version.value.tier_to_archive_after_days_since_creation
           }
         }

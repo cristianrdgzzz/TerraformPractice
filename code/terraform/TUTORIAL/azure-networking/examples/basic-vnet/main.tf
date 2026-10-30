@@ -14,7 +14,7 @@
 
 terraform {
   required_version = ">= 1.0"
-  
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -39,7 +39,7 @@ provider "azurerm" {
 resource "azurerm_resource_group" "main" {
   name     = "rg-basic-vnet-example"
   location = "eastus"
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"
@@ -57,12 +57,12 @@ resource "azurerm_resource_group" "main" {
 # ----------------------------------------------------------------------------
 module "vnet" {
   source = "../../modules/networking"
-  
+
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   vnet_name           = "vnet-basic-example"
   address_space       = ["10.0.0.0/16"]
-  
+
   # Subnet Configuration
   # Each subnet represents a different tier of the application:
   # - Web: Public-facing web servers
@@ -76,7 +76,7 @@ module "vnet" {
       service_endpoints = ["Microsoft.Storage", "Microsoft.Sql"]
     }
     "app-subnet" = {
-      address_prefixes = ["10.0.2.0/24"]
+      address_prefixes  = ["10.0.2.0/24"]
       service_endpoints = ["Microsoft.Storage"]
     }
     "db-subnet" = {
@@ -85,7 +85,7 @@ module "vnet" {
       # as it's the most restricted tier
     }
   }
-  
+
   # Network Security Group Configuration
   # NSGs act as a firewall at the network level
   network_security_groups = {
@@ -142,7 +142,7 @@ module "vnet" {
       ]
       associate_to_subnets = ["web-subnet"]
     }
-    
+
     "app-nsg" = {
       rules = [
         # Allow traffic from web subnet
@@ -172,7 +172,7 @@ module "vnet" {
       ]
       associate_to_subnets = ["app-subnet"]
     }
-    
+
     "db-nsg" = {
       rules = [
         # Only allow traffic from app subnet
@@ -203,7 +203,7 @@ module "vnet" {
       associate_to_subnets = ["db-subnet"]
     }
   }
-  
+
   tags = {
     Environment = "Example"
     ManagedBy   = "Terraform"

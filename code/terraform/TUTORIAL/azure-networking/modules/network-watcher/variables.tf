@@ -111,12 +111,12 @@ variable "connection_monitors" {
         disable_trace_route = optional(bool, false)
       }), null)
       http_configuration = optional(object({
-        port                = number
-        method              = optional(string, "Get")
-        path                = optional(string, "/")
-        request_headers     = optional(map(string), {})
+        port                     = number
+        method                   = optional(string, "Get")
+        path                     = optional(string, "/")
+        request_headers          = optional(map(string), {})
         valid_status_code_ranges = optional(list(string), ["200-299"])
-        prefer_https        = optional(bool, false)
+        prefer_https             = optional(bool, false)
       }), null)
       icmp_configuration = optional(object({
         disable_trace_route = optional(bool, false)

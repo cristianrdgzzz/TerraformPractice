@@ -92,10 +92,10 @@ variable "diagnostic_settings" {
     }
   EOT
   type = map(object({
-    target_resource_id         = string
-    log_analytics_workspace_id = optional(string, null)
-    storage_account_id          = optional(string, null)
-    eventhub_name               = optional(string, null)
+    target_resource_id             = string
+    log_analytics_workspace_id     = optional(string, null)
+    storage_account_id             = optional(string, null)
+    eventhub_name                  = optional(string, null)
     eventhub_authorization_rule_id = optional(string, null)
     logs = optional(map(object({
       enabled = bool
@@ -135,7 +135,7 @@ variable "action_groups" {
   EOT
   type = map(object({
     short_name = string
-    enabled     = optional(bool, true)
+    enabled    = optional(bool, true)
     email_receivers = optional(list(object({
       name                    = string
       email_address           = string
@@ -215,10 +215,10 @@ variable "metric_alerts" {
       threshold        = number
     }), null)
     dynamic_criteria = optional(object({
-      metric_namespace = string
-      metric_name      = string
-      aggregation      = string
-      operator         = string
+      metric_namespace  = string
+      metric_name       = string
+      aggregation       = string
+      operator          = string
       alert_sensitivity = string
     }), null)
     action_group_name = optional(string, null)
@@ -249,13 +249,13 @@ variable "log_alerts" {
     }
   EOT
   type = map(object({
-    description                 = optional(string, "")
-    log_analytics_workspace_id  = optional(string, null)
-    query                       = string
-    frequency                   = number
-    time_window                 = number
-    severity                    = optional(number, 2)
-    enabled                     = optional(bool, true)
+    description                = optional(string, "")
+    log_analytics_workspace_id = optional(string, null)
+    query                      = string
+    frequency                  = number
+    time_window                = number
+    severity                   = optional(number, 2)
+    enabled                    = optional(bool, true)
     trigger = object({
       operator  = string
       threshold = number

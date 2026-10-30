@@ -31,7 +31,7 @@ module "asg" {
   subnet_ids        = local.subnet_ids
   target_group_arns = [aws_lb_target_group.asg.arn]
   health_check_type = "ELB"
-  
+
   custom_tags = var.custom_tags
 }
 

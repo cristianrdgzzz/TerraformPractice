@@ -26,7 +26,7 @@ variable "vnet_name" {
 variable "address_space" {
   description = "List of address spaces (CIDR blocks) for the VNet. Example: ['10.0.0.0/16']"
   type        = list(string)
-  
+
   validation {
     condition     = length(var.address_space) > 0
     error_message = "At least one address space must be specified."
@@ -51,9 +51,9 @@ variable "subnets" {
     }
   EOT
   type = map(object({
-    address_prefixes                              = list(string)
-    service_endpoints                             = optional(list(string), [])
-    delegation                                    = optional(object({
+    address_prefixes  = list(string)
+    service_endpoints = optional(list(string), [])
+    delegation = optional(object({
       name = string
       service_delegation = object({
         name    = string
@@ -61,9 +61,9 @@ variable "subnets" {
       })
     }), null)
     private_endpoint_network_policies_enabled     = optional(bool, true)
-    private_link_service_network_policies_enabled  = optional(bool, true)
+    private_link_service_network_policies_enabled = optional(bool, true)
   }))
-  
+
   default = {}
 }
 
@@ -111,12 +111,12 @@ variable "network_security_groups" {
       source_address_prefixes                    = optional(list(string), [])
       source_application_security_group_ids      = optional(list(string), [])
       destination_address_prefix                 = optional(string, "*")
-      destination_address_prefixes              = optional(list(string), [])
+      destination_address_prefixes               = optional(list(string), [])
       destination_application_security_group_ids = optional(list(string), [])
     }))
     associate_to_subnets = list(string)
   }))
-  
+
   default = {}
 }
 
@@ -153,7 +153,7 @@ variable "route_tables" {
     }))
     associate_to_subnets = list(string)
   }))
-  
+
   default = {}
 }
 

@@ -68,7 +68,7 @@ variable "dns_zones" {
   EOT
   type = map(object({
     zone_type = string # "Public" or "Private"
-    tags       = optional(map(string), {})
+    tags      = optional(map(string), {})
   }))
   default = {}
 }
@@ -114,10 +114,10 @@ variable "private_dns_zone_virtual_network_links" {
     }
   EOT
   type = map(object({
-    zone_name           = string
-    virtual_network_id  = string
+    zone_name            = string
+    virtual_network_id   = string
     registration_enabled = optional(bool, false)
-    tags                = optional(map(string), {})
+    tags                 = optional(map(string), {})
   }))
   default = {}
 }

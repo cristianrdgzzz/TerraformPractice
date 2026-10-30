@@ -18,9 +18,9 @@
 # group module being instantiated.
 # ----------------------------------------------------------------------------
 module "resource_group" {
-  source   = "../resource-group"
-  count    = var.create_resource_group ? 1 : 0
-  
+  source = "../resource-group"
+  count  = var.create_resource_group ? 1 : 0
+
   project_name     = var.project_name
   application_name = var.application_name
   environment      = var.environment
@@ -60,15 +60,15 @@ resource "azurerm_dns_zone" "public" {
     for zone_name, zone_config in var.dns_zones : zone_name => zone_config
     if zone_config.zone_type == "Public"
   }
-  
+
   # Zone name (e.g., "contoso.com")
   # This becomes the root domain for all records in this zone
-  name                = each.key
-  
+  name = each.key
+
   # Resource group where the DNS zone will be created
   # Uses the local value that handles both module and variable scenarios
   resource_group_name = local.resource_group_name
-  
+
   # Merge default tags with zone-specific tags
   # Zone-specific tags override default tags if there are conflicts
   tags = merge(var.tags, each.value.tags)
@@ -97,15 +97,15 @@ resource "azurerm_private_dns_zone" "private" {
     for zone_name, zone_config in var.dns_zones : zone_name => zone_config
     if zone_config.zone_type == "Private"
   }
-  
+
   # Zone name (e.g., "internal.contoso.com")
   # This becomes the root domain for all records in this zone
-  name                = each.key
-  
+  name = each.key
+
   # Resource group where the private DNS zone will be created
   # Uses the local value that handles both module and variable scenarios
   resource_group_name = local.resource_group_name
-  
+
   # Merge default tags with zone-specific tags
   # Zone-specific tags override default tags if there are conflicts
   tags = merge(var.tags, each.value.tags)
@@ -151,24 +151,24 @@ resource "azurerm_dns_a_record" "public" {
     for key, record in var.dns_records : key => record
     if record.type == "A" && try(azurerm_dns_zone.public[record.zone_name], null) != null
   }
-  
+
   # Record name (e.g., "www" for www.contoso.com, "@" for root domain)
-  name                = each.value.name
-  
+  name = each.value.name
+
   # Zone name where this record will be created
-  zone_name           = azurerm_dns_zone.public[each.value.zone_name].name
-  
+  zone_name = azurerm_dns_zone.public[each.value.zone_name].name
+
   # Resource group containing the DNS zone
   resource_group_name = local.resource_group_name
-  
+
   # Time To Live in seconds (how long DNS resolvers cache this record)
   # Common values: 300 (5 min) for dynamic, 3600 (1 hour) for static
-  ttl                 = each.value.ttl
-  
+  ttl = each.value.ttl
+
   # List of IPv4 addresses this record points to
   # Multiple addresses provide redundancy and load distribution
-  records             = each.value.records
-  
+  records = each.value.records
+
   # Merge default tags with record-specific tags
   tags = merge(var.tags, each.value.tags)
 }
@@ -187,22 +187,22 @@ resource "azurerm_dns_aaaa_record" "public" {
     for key, record in var.dns_records : key => record
     if record.type == "AAAA" && try(azurerm_dns_zone.public[record.zone_name], null) != null
   }
-  
+
   # Record name (e.g., "www" for www.contoso.com)
-  name                = each.value.name
-  
+  name = each.value.name
+
   # Zone name where this record will be created
-  zone_name           = azurerm_dns_zone.public[each.value.zone_name].name
-  
+  zone_name = azurerm_dns_zone.public[each.value.zone_name].name
+
   # Resource group containing the DNS zone
   resource_group_name = local.resource_group_name
-  
+
   # Time To Live in seconds
-  ttl                 = each.value.ttl
-  
+  ttl = each.value.ttl
+
   # List of IPv6 addresses this record points to
-  records             = each.value.records
-  
+  records = each.value.records
+
   # Merge default tags with record-specific tags
   tags = merge(var.tags, each.value.tags)
 }
@@ -224,23 +224,23 @@ resource "azurerm_dns_cname_record" "public" {
     for key, record in var.dns_records : key => record
     if record.type == "CNAME" && try(azurerm_dns_zone.public[record.zone_name], null) != null
   }
-  
+
   # Record name (alias being created, e.g., "www-alias")
-  name                = each.value.name
-  
+  name = each.value.name
+
   # Zone name where this record will be created
-  zone_name           = azurerm_dns_zone.public[each.value.zone_name].name
-  
+  zone_name = azurerm_dns_zone.public[each.value.zone_name].name
+
   # Resource group containing the DNS zone
   resource_group_name = local.resource_group_name
-  
+
   # Time To Live in seconds
-  ttl                 = each.value.ttl
-  
+  ttl = each.value.ttl
+
   # CNAME can only have a single target (take first record from list)
   # The target must be a fully qualified domain name
-  record              = each.value.records[0]
-  
+  record = each.value.records[0]
+
   # Merge default tags with record-specific tags
   tags = merge(var.tags, each.value.tags)
 }
@@ -266,19 +266,19 @@ resource "azurerm_dns_mx_record" "public" {
     for key, record in var.dns_records : key => record
     if record.type == "MX" && try(azurerm_dns_zone.public[record.zone_name], null) != null
   }
-  
+
   # Record name (typically "@" for root domain)
-  name                = each.value.name
-  
+  name = each.value.name
+
   # Zone name where this record will be created
-  zone_name           = azurerm_dns_zone.public[each.value.zone_name].name
-  
+  zone_name = azurerm_dns_zone.public[each.value.zone_name].name
+
   # Resource group containing the DNS zone
   resource_group_name = local.resource_group_name
-  
+
   # Time To Live in seconds
-  ttl                 = each.value.ttl
-  
+  ttl = each.value.ttl
+
   # Dynamic block to create multiple MX records
   # Each record in the input list is parsed: "priority mailserver"
   # Split by space to extract preference (priority) and exchange (mailserver)
@@ -288,12 +288,12 @@ resource "azurerm_dns_mx_record" "public" {
       # Preference/priority: Lower number = higher priority
       # Mail servers are tried in order of preference
       preference = split(" ", record.value)[0]
-      
+
       # Exchange: The mail server hostname (must be FQDN)
-      exchange   = split(" ", record.value)[1]
+      exchange = split(" ", record.value)[1]
     }
   }
-  
+
   # Merge default tags with record-specific tags
   tags = merge(var.tags, each.value.tags)
 }
@@ -323,19 +323,19 @@ resource "azurerm_dns_txt_record" "public" {
     for key, record in var.dns_records : key => record
     if record.type == "TXT" && try(azurerm_dns_zone.public[record.zone_name], null) != null
   }
-  
+
   # Record name (e.g., "@" for root, "_dmarc" for DMARC, etc.)
-  name                = each.value.name
-  
+  name = each.value.name
+
   # Zone name where this record will be created
-  zone_name           = azurerm_dns_zone.public[each.value.zone_name].name
-  
+  zone_name = azurerm_dns_zone.public[each.value.zone_name].name
+
   # Resource group containing the DNS zone
   resource_group_name = local.resource_group_name
-  
+
   # Time To Live in seconds
-  ttl                 = each.value.ttl
-  
+  ttl = each.value.ttl
+
   # TXT records require a "record" block with "value" attribute
   # Each string in the records list becomes a separate value in the TXT record
   # Azure automatically handles concatenation of multiple values
@@ -347,7 +347,7 @@ resource "azurerm_dns_txt_record" "public" {
       value = record.value
     }
   }
-  
+
   # Merge default tags with record-specific tags
   tags = merge(var.tags, each.value.tags)
 }
@@ -376,22 +376,22 @@ resource "azurerm_private_dns_a_record" "private" {
     for key, record in var.dns_records : key => record
     if record.type == "A" && try(azurerm_private_dns_zone.private[record.zone_name], null) != null
   }
-  
+
   # Record name (e.g., "app1" for app1.internal.contoso.com)
-  name                = each.value.name
-  
+  name = each.value.name
+
   # Zone name where this record will be created
-  zone_name           = azurerm_private_dns_zone.private[each.value.zone_name].name
-  
+  zone_name = azurerm_private_dns_zone.private[each.value.zone_name].name
+
   # Resource group containing the private DNS zone
   resource_group_name = local.resource_group_name
-  
+
   # Time To Live in seconds
-  ttl                 = each.value.ttl
-  
+  ttl = each.value.ttl
+
   # List of IPv4 addresses (typically private IPs like 10.x.x.x)
-  records             = each.value.records
-  
+  records = each.value.records
+
   # Merge default tags with record-specific tags
   tags = merge(var.tags, each.value.tags)
 }
@@ -410,22 +410,22 @@ resource "azurerm_private_dns_cname_record" "private" {
     for key, record in var.dns_records : key => record
     if record.type == "CNAME" && try(azurerm_private_dns_zone.private[record.zone_name], null) != null
   }
-  
+
   # Record name (alias being created)
-  name                = each.value.name
-  
+  name = each.value.name
+
   # Zone name where this record will be created
-  zone_name           = azurerm_private_dns_zone.private[each.value.zone_name].name
-  
+  zone_name = azurerm_private_dns_zone.private[each.value.zone_name].name
+
   # Resource group containing the private DNS zone
   resource_group_name = local.resource_group_name
-  
+
   # Time To Live in seconds
-  ttl                 = each.value.ttl
-  
+  ttl = each.value.ttl
+
   # CNAME target (single record, must be FQDN)
-  record              = each.value.records[0]
-  
+  record = each.value.records[0]
+
   # Merge default tags with record-specific tags
   tags = merge(var.tags, each.value.tags)
 }
@@ -454,26 +454,26 @@ resource "azurerm_private_dns_cname_record" "private" {
 # ----------------------------------------------------------------------------
 resource "azurerm_private_dns_zone_virtual_network_link" "main" {
   for_each = var.private_dns_zone_virtual_network_links
-  
+
   # Link name: Extract from the key (format: "zone_name/vnet_link_name")
   # The key format allows multiple links per zone with unique names
-  name                  = split("/", each.key)[1]
-  
+  name = split("/", each.key)[1]
+
   # Resource group containing the private DNS zone
-  resource_group_name   = local.resource_group_name
-  
+  resource_group_name = local.resource_group_name
+
   # Name of the private DNS zone to link
   private_dns_zone_name = each.value.zone_name
-  
+
   # ID of the virtual network to link
   # This enables the VNet to resolve names in the private DNS zone
-  virtual_network_id     = each.value.virtual_network_id
-  
+  virtual_network_id = each.value.virtual_network_id
+
   # Auto-registration setting:
   # - true: VMs in this VNet automatically register their hostnames
   # - false: All DNS records must be created manually
-  registration_enabled  = each.value.registration_enabled
-  
+  registration_enabled = each.value.registration_enabled
+
   # Merge default tags with link-specific tags
   tags = merge(var.tags, each.value.tags)
 }

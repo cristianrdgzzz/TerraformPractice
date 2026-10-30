@@ -35,7 +35,7 @@ resource "azurerm_virtual_network" "main" {
   location            = var.location
   resource_group_name = var.resource_group_name
   address_space       = var.address_space
-  
+
   # DDoS Protection: Protects against distributed denial-of-service attacks
   # Requires a DDoS Protection Plan (Standard tier) to be created separately
   # This is a paid service that provides advanced DDoS mitigation
@@ -46,13 +46,13 @@ resource "azurerm_virtual_network" "main" {
       enable = true
     }
   }
-  
+
   # Custom DNS servers: Useful for hybrid scenarios where you need to resolve
   # on-premises resources or use custom DNS infrastructure
   # If empty, Azure's default DNS (168.63.129.16) is used
   # Note: Azure reserves 4 IP addresses per subnet (network, gateway, 2x DNS)
   dns_servers = var.dns_servers
-  
+
   tags = var.tags
 }
 
@@ -75,19 +75,19 @@ resource "azurerm_virtual_network" "main" {
 # ----------------------------------------------------------------------------
 resource "azurerm_subnet" "main" {
   for_each = var.subnets
-  
+
   name                 = each.key
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.main.name
   address_prefixes     = each.value.address_prefixes
-  
+
   # Service Endpoints: Extend VNet identity to Azure services
   # This allows services like Storage Accounts and SQL Databases to be
   # accessed from the VNet without going through the public internet
   # Traffic stays on Azure's backbone network
   # Available services: Microsoft.Storage, Microsoft.Sql, Microsoft.KeyVault, etc.
   service_endpoints = each.value.service_endpoints
-  
+
   # Service Delegation: Delegates subnet management to Azure services
   # Example: Delegating to "Microsoft.ContainerService/managedClusters"
   # allows AKS to manage the subnet (creates required resources automatically)
@@ -101,12 +101,12 @@ resource "azurerm_subnet" "main" {
       }
     }
   }
-  
+
   # Private Endpoint Network Policies:
   # When enabled, allows private endpoints to be created in this subnet
   # Private endpoints provide private IP connectivity to Azure services
   private_endpoint_network_policies_enabled = each.value.private_endpoint_network_policies_enabled
-  
+
   # Private Link Service Network Policies:
   # When enabled, allows private link services to be created in this subnet
   # Private link services expose your services privately to other VNets

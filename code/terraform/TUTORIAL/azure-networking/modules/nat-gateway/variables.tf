@@ -57,7 +57,7 @@ variable "idle_timeout_in_minutes" {
   description = "Idle timeout in minutes. Default is 4 minutes. Range: 4-120."
   type        = number
   default     = 4
-  
+
   validation {
     condition     = var.idle_timeout_in_minutes >= 4 && var.idle_timeout_in_minutes <= 120
     error_message = "Idle timeout must be between 4 and 120 minutes."

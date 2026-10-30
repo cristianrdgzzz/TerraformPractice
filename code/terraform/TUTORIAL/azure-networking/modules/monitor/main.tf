@@ -20,15 +20,15 @@
 # Each workspace has its own data repository and configuration.
 # ----------------------------------------------------------------------------
 resource "azurerm_log_analytics_workspace" "main" {
-  count                      = var.create_log_analytics_workspace ? 1 : 0
-  name                       = var.log_analytics_workspace_name
-  location                   = var.location
-  resource_group_name        = var.resource_group_name
-  sku                        = var.log_analytics_sku
-  retention_in_days          = var.log_analytics_retention_in_days
-  daily_quota_gb             = var.log_analytics_daily_quota_gb
-  internet_ingestion_enabled   = var.log_analytics_internet_ingestion_enabled
-  internet_query_enabled      = var.log_analytics_internet_query_enabled
+  count                              = var.create_log_analytics_workspace ? 1 : 0
+  name                               = var.log_analytics_workspace_name
+  location                           = var.location
+  resource_group_name                = var.resource_group_name
+  sku                                = var.log_analytics_sku
+  retention_in_days                  = var.log_analytics_retention_in_days
+  daily_quota_gb                     = var.log_analytics_daily_quota_gb
+  internet_ingestion_enabled         = var.log_analytics_internet_ingestion_enabled
+  internet_query_enabled             = var.log_analytics_internet_query_enabled
   reservation_capacity_in_gb_per_day = var.log_analytics_reservation_capacity
 
   tags = var.tags
@@ -44,11 +44,11 @@ resource "azurerm_log_analytics_workspace" "main" {
 resource "azurerm_monitor_diagnostic_setting" "main" {
   for_each = var.diagnostic_settings
 
-  name                       = each.key
-  target_resource_id         = each.value.target_resource_id
-  log_analytics_workspace_id = var.create_log_analytics_workspace ? azurerm_log_analytics_workspace.main[0].id : each.value.log_analytics_workspace_id
-  storage_account_id          = each.value.storage_account_id
-  eventhub_name               = each.value.eventhub_name
+  name                           = each.key
+  target_resource_id             = each.value.target_resource_id
+  log_analytics_workspace_id     = var.create_log_analytics_workspace ? azurerm_log_analytics_workspace.main[0].id : each.value.log_analytics_workspace_id
+  storage_account_id             = each.value.storage_account_id
+  eventhub_name                  = each.value.eventhub_name
   eventhub_authorization_rule_id = each.value.eventhub_authorization_rule_id
 
   # Log categories
@@ -144,7 +144,7 @@ resource "azurerm_monitor_action_group" "main" {
       name                    = logic_app_receiver.value.name
       resource_id             = logic_app_receiver.value.resource_id
       callback_url            = logic_app_receiver.value.callback_url
-      use_common_alert_schema  = logic_app_receiver.value.use_common_alert_schema != null ? logic_app_receiver.value.use_common_alert_schema : false
+      use_common_alert_schema = logic_app_receiver.value.use_common_alert_schema != null ? logic_app_receiver.value.use_common_alert_schema : false
     }
   }
 
@@ -198,10 +198,10 @@ resource "azurerm_monitor_metric_alert" "main" {
   dynamic "dynamic_criteria" {
     for_each = each.value.dynamic_criteria != null ? [each.value.dynamic_criteria] : []
     content {
-      metric_namespace = dynamic_criteria.value.metric_namespace
-      metric_name      = dynamic_criteria.value.metric_name
-      aggregation      = dynamic_criteria.value.aggregation
-      operator         = dynamic_criteria.value.operator
+      metric_namespace  = dynamic_criteria.value.metric_namespace
+      metric_name       = dynamic_criteria.value.metric_name
+      aggregation       = dynamic_criteria.value.aggregation
+      operator          = dynamic_criteria.value.operator
       alert_sensitivity = dynamic_criteria.value.alert_sensitivity
     }
   }

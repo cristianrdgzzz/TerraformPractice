@@ -12,16 +12,16 @@ terraform {
     }
   }
   backend "azurerm" {
-    resource_group_name = "rg-terraform-state"
+    resource_group_name  = "rg-terraform-state"
     storage_account_name = "sttflibro1855"
-    container_name = "tfstate"
-    key = "01-web-server-azure.terraform.tfstate"
+    container_name       = "tfstate"
+    key                  = "01-web-server-azure.terraform.tfstate"
   }
 }
 
 provider "azurerm" {
   features {}
-  }
+}
 
 
 provider "tls" {}

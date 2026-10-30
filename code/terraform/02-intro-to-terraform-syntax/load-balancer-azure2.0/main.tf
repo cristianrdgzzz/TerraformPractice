@@ -454,11 +454,11 @@ resource "null_resource" "backend_setup" {
     ]
 
     connection {
-      type        = "ssh"
-      user        = "azureuser"
-      password    = var.admin_password
-      host        = azurerm_network_interface.backend[count.index].private_ip_address
-      agent       = false
+      type     = "ssh"
+      user     = "azureuser"
+      password = var.admin_password
+      host     = azurerm_network_interface.backend[count.index].private_ip_address
+      agent    = false
     }
   }
 

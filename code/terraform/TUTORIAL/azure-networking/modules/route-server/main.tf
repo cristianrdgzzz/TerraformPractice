@@ -28,8 +28,8 @@
 # is set to true. If false, it uses the provided resource_group_name variable.
 # ----------------------------------------------------------------------------
 module "resource_group" {
-  source   = "../resource-group"
-  count    = var.create_resource_group ? 1 : 0
+  source = "../resource-group"
+  count  = var.create_resource_group ? 1 : 0
 
   project_name     = var.project_name
   application_name = var.application_name
@@ -43,7 +43,7 @@ module "resource_group" {
 # ----------------------------------------------------------------------------
 locals {
   # Use the resource group name from the module if created, otherwise use the variable
-  resource_group_name = try(module.resource_group[0].name, var.resource_group_name)
+  resource_group_name     = try(module.resource_group[0].name, var.resource_group_name)
   resource_group_location = try(module.resource_group[0].location, var.location)
 }
 
@@ -84,11 +84,11 @@ resource "azurerm_public_ip" "route_server" {
 # - Routes from Azure (VNet routes) are advertised to NVAs
 # ----------------------------------------------------------------------------
 resource "azurerm_route_server" "main" {
-  name                = var.route_server_name
-  location            = local.resource_group_location
-  resource_group_name = local.resource_group_name
-  sku                 = var.sku
-  subnet_id           = var.subnet_id
+  name                 = var.route_server_name
+  location             = local.resource_group_location
+  resource_group_name  = local.resource_group_name
+  sku                  = var.sku
+  subnet_id            = var.subnet_id
   public_ip_address_id = azurerm_public_ip.route_server.id
 
   branch_to_branch_traffic_enabled = var.branch_to_branch_traffic_enabled

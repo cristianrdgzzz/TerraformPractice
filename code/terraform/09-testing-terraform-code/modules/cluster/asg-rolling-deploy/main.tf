@@ -27,8 +27,8 @@ resource "aws_autoscaling_group" "example" {
   vpc_zone_identifier  = var.subnet_ids
 
   # Configure integrations with a load balancer
-  target_group_arns    = var.target_group_arns
-  health_check_type    = var.health_check_type
+  target_group_arns = var.target_group_arns
+  health_check_type = var.health_check_type
 
   min_size = var.min_size
   max_size = var.max_size
@@ -49,7 +49,7 @@ resource "aws_autoscaling_group" "example" {
 
   dynamic "tag" {
     for_each = {
-      for key, value in var.custom_tags:
+      for key, value in var.custom_tags :
       key => upper(value)
       if key != "Name"
     }

@@ -31,8 +31,8 @@ resource "azurerm_monitor_action_group" "budget" {
   dynamic "email_receiver" {
     for_each = var.email_receivers
     content {
-      name          = email_receiver.value.name
-      email_address = email_receiver.value.email_address
+      name                    = email_receiver.value.name
+      email_address           = email_receiver.value.email_address
       use_common_alert_schema = email_receiver.value.use_common_alert_schema != null ? email_receiver.value.use_common_alert_schema : false
     }
   }
@@ -52,7 +52,7 @@ resource "azurerm_monitor_action_group" "budget" {
     for_each = var.webhook_receivers
     content {
       name                    = webhook_receiver.value.name
-      service_uri            = webhook_receiver.value.service_uri
+      service_uri             = webhook_receiver.value.service_uri
       use_common_alert_schema = webhook_receiver.value.use_common_alert_schema != null ? webhook_receiver.value.use_common_alert_schema : false
       aad_auth {
         object_id      = webhook_receiver.value.aad_auth.object_id
@@ -164,7 +164,7 @@ resource "azurerm_consumption_budget_resource_group" "budget" {
       dynamic "tag" {
         for_each = filter.value
         content {
-          name  = tag.key
+          name   = tag.key
           values = tag.value
         }
       }
@@ -207,7 +207,7 @@ resource "azurerm_consumption_budget_subscription" "budget" {
       dynamic "tag" {
         for_each = filter.value
         content {
-          name  = tag.key
+          name   = tag.key
           values = tag.value
         }
       }

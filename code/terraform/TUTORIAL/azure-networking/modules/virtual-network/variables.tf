@@ -33,7 +33,7 @@ variable "address_space" {
     - Plan carefully for future growth and connectivity requirements
   EOT
   type        = list(string)
-  
+
   validation {
     condition     = length(var.address_space) > 0
     error_message = "At least one address space must be specified."
@@ -76,9 +76,9 @@ variable "subnets" {
     - Broadcast address (last)
   EOT
   type = map(object({
-    address_prefixes                              = list(string)
-    service_endpoints                             = optional(list(string), [])
-    delegation                                    = optional(object({
+    address_prefixes  = list(string)
+    service_endpoints = optional(list(string), [])
+    delegation = optional(object({
       name = string
       service_delegation = object({
         name    = string
@@ -89,7 +89,7 @@ variable "subnets" {
     private_link_service_network_policies_enabled = optional(bool, true)
     route_table_name                              = optional(string, null)
   }))
-  
+
   default = {}
 }
 
@@ -231,7 +231,7 @@ variable "routes" {
     next_hop_in_ip_address = optional(string, null)
   }))
   default = {}
-  
+
   validation {
     condition = alltrue([
       for route in var.routes : contains([
@@ -245,7 +245,7 @@ variable "routes" {
     ])
     error_message = "next_hop_type must be one of: VirtualAppliance, VirtualNetworkGateway, VnetLocal, Internet, None, VnetPeering"
   }
-  
+
   validation {
     condition = alltrue([
       for route in var.routes : route.next_hop_type != "VirtualAppliance" || route.next_hop_in_ip_address != null

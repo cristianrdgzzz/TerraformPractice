@@ -49,7 +49,7 @@ resource "azurerm_nat_gateway" "main" {
   sku_name                = "Standard" # Only Standard SKU is available
   idle_timeout_in_minutes = var.idle_timeout_in_minutes
   zones                   = var.zones
-  
+
   # Public IP Addresses: Used for outbound connections
   # Each public IP supports up to 64,000 concurrent flows
   # Multiple IPs can be added for more capacity (up to 16 public IPs)
@@ -60,7 +60,7 @@ resource "azurerm_nat_gateway" "main" {
       id = public_ip_address_ids.value
     }
   }
-  
+
   # Public IP Prefix: Alternative to individual public IPs
   # Provides a contiguous range of public IP addresses
   # Useful for predictable outbound IP addresses
@@ -71,7 +71,7 @@ resource "azurerm_nat_gateway" "main" {
       id = public_ip_prefix_ids.value
     }
   }
-  
+
   tags = var.tags
 }
 

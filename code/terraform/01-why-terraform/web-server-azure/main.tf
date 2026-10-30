@@ -13,12 +13,12 @@ terraform {
       version = "~> 4.0"
     }
   }
-# Configuración del backend para almacenar el estado de Terraform en Azure Storage
-backend "azurerm" {
-    resource_group_name = "rg-terraform-state"
+  # Configuración del backend para almacenar el estado de Terraform en Azure Storage
+  backend "azurerm" {
+    resource_group_name  = "rg-terraform-state"
     storage_account_name = "sttflibro1855"
-    container_name = "tfstate"
-    key = "01-web-server-azure.terraform.tfstate"
+    container_name       = "tfstate"
+    key                  = "01-web-server-azure.terraform.tfstate"
   }
 }
 

@@ -31,20 +31,20 @@ resource "azurerm_firewall_policy" "main" {
   location            = var.location
   resource_group_name = var.resource_group_name
   sku                 = var.sku
-  
+
   # Threat Intelligence
-  threat_intelligence_mode        = var.threat_intelligence_mode
+  threat_intelligence_mode = var.threat_intelligence_mode
   threat_intelligence_allowlist {
     ip_addresses = var.threat_intelligence_allowlist
   }
-  
+
   # DNS Settings
   dns {
-    servers                 = var.dns_settings.servers
-    proxy_enabled           = var.dns_settings.proxy_enabled
+    servers                   = var.dns_settings.servers
+    proxy_enabled             = var.dns_settings.proxy_enabled
     network_rule_fqdn_enabled = var.dns_settings.network_rule_fqdn_enabled
   }
-  
+
   tags = var.tags
 }
 
@@ -59,11 +59,11 @@ resource "azurerm_firewall_policy" "main" {
 # ----------------------------------------------------------------------------
 resource "azurerm_firewall_policy_rule_collection_group" "main" {
   for_each = var.rule_collection_groups
-  
+
   name               = each.key
   firewall_policy_id = azurerm_firewall_policy.main.id
   priority           = each.value.priority
-  
+
   # Network Rule Collections
   dynamic "network_rule_collection" {
     for_each = each.value.network_rule_collections != null ? each.value.network_rule_collections : []
@@ -71,7 +71,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "main" {
       name     = network_rule_collection.value.name
       priority = network_rule_collection.value.priority
       action   = network_rule_collection.value.action
-      
+
       dynamic "rule" {
         for_each = network_rule_collection.value.rules
         content {
@@ -85,7 +85,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "main" {
       }
     }
   }
-  
+
   # Application Rule Collections
   dynamic "application_rule_collection" {
     for_each = each.value.application_rule_collections != null ? each.value.application_rule_collections : []
@@ -93,7 +93,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "main" {
       name     = application_rule_collection.value.name
       priority = application_rule_collection.value.priority
       action   = application_rule_collection.value.action
-      
+
       dynamic "rule" {
         for_each = application_rule_collection.value.rules
         content {
@@ -102,7 +102,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "main" {
           source_ip_groups = rule.value.source_ip_groups
           target_fqdns     = rule.value.target_fqdns
           fqdn_tags        = rule.value.fqdn_tags
-          
+
           dynamic "protocols" {
             for_each = rule.value.protocols
             content {
@@ -114,7 +114,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "main" {
       }
     }
   }
-  
+
   # NAT Rule Collections
   dynamic "nat_rule_collection" {
     for_each = each.value.nat_rule_collections != null ? each.value.nat_rule_collections : []
@@ -122,7 +122,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "main" {
       name     = nat_rule_collection.value.name
       priority = nat_rule_collection.value.priority
       action   = nat_rule_collection.value.action
-      
+
       dynamic "rule" {
         for_each = nat_rule_collection.value.rules
         content {

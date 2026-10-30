@@ -36,7 +36,7 @@ variable "office365_local_breakout_category" {
   description = "Office 365 local breakout category. Options: 'None', 'Optimize', 'Allow', 'Default'"
   type        = string
   default     = "None"
-  
+
   validation {
     condition     = contains(["None", "Optimize", "Allow", "Default"], var.office365_local_breakout_category)
     error_message = "Office 365 local breakout category must be one of: None, Optimize, Allow, Default."
@@ -47,7 +47,7 @@ variable "type" {
   description = "Virtual WAN type. Options: 'Basic' or 'Standard'"
   type        = string
   default     = "Standard"
-  
+
   validation {
     condition     = contains(["Basic", "Standard"], var.type)
     error_message = "Virtual WAN type must be either 'Basic' or 'Standard'."
@@ -70,11 +70,11 @@ variable "virtual_hubs" {
     }
   EOT
   type = map(object({
-    name                    = string
-    address_prefix          = string
-    sku                     = string # "Basic" or "Standard"
-    hub_routing_preference  = optional(string, "ExpressRoute")
-    tags                    = optional(map(string), {})
+    name                   = string
+    address_prefix         = string
+    sku                    = string # "Basic" or "Standard"
+    hub_routing_preference = optional(string, "ExpressRoute")
+    tags                   = optional(map(string), {})
   }))
   default = {}
 }

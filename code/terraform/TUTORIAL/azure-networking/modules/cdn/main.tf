@@ -35,7 +35,7 @@ resource "azurerm_cdn_profile" "main" {
   location            = var.location
   resource_group_name = var.resource_group_name
   sku                 = var.sku
-  
+
   tags = var.tags
 }
 
@@ -55,48 +55,48 @@ resource "azurerm_cdn_profile" "main" {
 # ----------------------------------------------------------------------------
 resource "azurerm_cdn_endpoint" "main" {
   for_each = var.cdn_endpoints
-  
+
   name                = each.value.name
   profile_name        = azurerm_cdn_profile.main.name
   location            = var.location
   resource_group_name = var.resource_group_name
   origin_host_header  = each.value.origin_host_header
-  
+
   # Origins (source servers)
   dynamic "origin" {
     for_each = each.value.origins
     content {
-      name      = origin.value.name
-      host_name = origin.value.host_name
-      http_port = origin.value.http_port
+      name       = origin.value.name
+      host_name  = origin.value.host_name
+      http_port  = origin.value.http_port
       https_port = origin.value.https_port
     }
   }
-  
+
   # Protocol Settings
   is_http_allowed  = each.value.is_http_allowed
   is_https_allowed = each.value.is_https_allowed
-  
+
   # Caching
   querystring_caching_behaviour = each.value.querystring_caching_behaviour
-  
+
   # Compression
   is_compression_enabled    = each.value.is_compression_enabled
   content_types_to_compress = each.value.content_types_to_compress
-  
+
   # Optimization
   optimization_type = each.value.optimization_type
-  
+
   # Geo-filtering
   dynamic "geo_filter" {
     for_each = each.value.geo_filter != null ? each.value.geo_filter : []
     content {
       relative_path = geo_filter.value.relative_path
       action        = geo_filter.value.action
-      country_codes  = geo_filter.value.country_codes
+      country_codes = geo_filter.value.country_codes
     }
   }
-  
+
   tags = merge(var.tags, each.value.tags)
 }
 

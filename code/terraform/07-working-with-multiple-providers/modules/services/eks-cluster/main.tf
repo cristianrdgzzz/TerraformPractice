@@ -73,7 +73,7 @@ resource "aws_eks_node_group" "nodes" {
   node_group_name = var.name
   node_role_arn   = aws_iam_role.node_group.arn
   subnet_ids      = data.aws_subnets.default.ids
-  instance_types = var.instance_types
+  instance_types  = var.instance_types
 
   scaling_config {
     min_size     = var.min_size

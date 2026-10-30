@@ -16,9 +16,9 @@ output "frontend_ip_configurations" {
   description = "Map of frontend IP configuration names to their details"
   value = {
     for fe in azurerm_lb.main.frontend_ip_configuration : fe.name => {
-      id                = fe.id
-      name              = fe.name
-      private_ip_address = fe.private_ip_address
+      id                   = fe.id
+      name                 = fe.name
+      private_ip_address   = fe.private_ip_address
       public_ip_address_id = fe.public_ip_address_id
     }
   }

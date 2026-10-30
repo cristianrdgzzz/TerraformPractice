@@ -21,18 +21,18 @@
 resource "azurerm_storage_account" "export" {
   count = var.create_storage_account ? 1 : 0
 
-  name                     = var.storage_account_name
-  resource_group_name      = var.resource_group_name
-  location                 = var.location
-  account_tier             = var.storage_account_tier
-  account_replication_type = var.storage_account_replication_type
-  account_kind             = var.storage_account_kind
-  min_tls_version          = var.storage_min_tls_version
+  name                            = var.storage_account_name
+  resource_group_name             = var.resource_group_name
+  location                        = var.location
+  account_tier                    = var.storage_account_tier
+  account_replication_type        = var.storage_account_replication_type
+  account_kind                    = var.storage_account_kind
+  min_tls_version                 = var.storage_min_tls_version
   allow_nested_items_to_be_public = false
 
   # Enable blob versioning and soft delete for data protection
   blob_properties {
-    versioning_enabled       = var.enable_blob_versioning
+    versioning_enabled = var.enable_blob_versioning
     delete_retention_policy {
       days = var.blob_soft_delete_retention_days
     }
@@ -99,7 +99,7 @@ resource "azurerm_storage_account" "export" {
 
 # Local value to determine which storage account ID to use
 locals {
-  storage_account_id = var.create_storage_account ? azurerm_storage_account.export[0].id : var.existing_storage_account_id
+  storage_account_id   = var.create_storage_account ? azurerm_storage_account.export[0].id : var.existing_storage_account_id
   storage_account_name = var.create_storage_account ? azurerm_storage_account.export[0].name : var.existing_storage_account_name
 }
 
@@ -125,9 +125,9 @@ resource "azurerm_storage_container" "export" {
 # Cost Management Export Configuration
 # ----------------------------------------------------------------------------
 resource "azurerm_cost_management_export_resource_group" "export" {
-  name              = var.export_name
-  resource_group_id = var.resource_group_id
-  recurrence_type   = var.recurrence_type
+  name                         = var.export_name
+  resource_group_id            = var.resource_group_id
+  recurrence_type              = var.recurrence_type
   recurrence_period_start_date = var.recurrence_period_start_date != null ? var.recurrence_period_start_date : formatdate("YYYY-MM-DD'T'00:00:00Z", timestamp())
   recurrence_period_end_date   = var.recurrence_period_end_date != null ? var.recurrence_period_end_date : formatdate("YYYY-MM-DD'T'00:00:00Z", timeadd(timestamp(), "${var.recurrence_period_years * 8760}h"))
 

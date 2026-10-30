@@ -37,11 +37,11 @@
 # This module uses the classic Front Door resource (azurerm_frontdoor) for compatibility.
 # ----------------------------------------------------------------------------
 resource "azurerm_frontdoor" "main" {
-  name                = var.front_door_name
-  resource_group_name = var.resource_group_name
-  friendly_name       = var.friendly_name != null ? var.friendly_name : var.front_door_name
+  name                  = var.front_door_name
+  resource_group_name   = var.resource_group_name
+  friendly_name         = var.friendly_name != null ? var.friendly_name : var.front_door_name
   load_balancer_enabled = var.load_balancer_enabled
-  
+
   # Backend Pools
   dynamic "backend_pool" {
     for_each = var.backend_pools
@@ -49,7 +49,7 @@ resource "azurerm_frontdoor" "main" {
       name                = backend_pool.value.name
       health_probe_name   = backend_pool.value.health_probe_name
       load_balancing_name = backend_pool.value.load_balancing_name
-      
+
       dynamic "backend" {
         for_each = backend_pool.value.backends
         content {
@@ -64,7 +64,7 @@ resource "azurerm_frontdoor" "main" {
       }
     }
   }
-  
+
   # Backend Pool Health Probes
   dynamic "backend_pool_health_probe" {
     for_each = var.backend_pool_health_probes
@@ -76,7 +76,7 @@ resource "azurerm_frontdoor" "main" {
       enabled             = backend_pool_health_probe.value.enabled
     }
   }
-  
+
   # Backend Pool Load Balancing Settings
   dynamic "backend_pool_load_balancing" {
     for_each = var.backend_pool_load_balancing
@@ -87,7 +87,7 @@ resource "azurerm_frontdoor" "main" {
       additional_latency_milliseconds = backend_pool_load_balancing.value.additional_latency_milliseconds
     }
   }
-  
+
   # Frontend Endpoints
   dynamic "frontend_endpoint" {
     for_each = var.frontend_endpoints
@@ -99,7 +99,7 @@ resource "azurerm_frontdoor" "main" {
       web_application_firewall_policy_link_id = frontend_endpoint.value.web_application_firewall_policy_link_id
     }
   }
-  
+
   # Routing Rules
   dynamic "routing_rule" {
     for_each = var.routing_rules
@@ -109,7 +109,7 @@ resource "azurerm_frontdoor" "main" {
       accepted_protocols = routing_rule.value.accepted_protocols
       patterns_to_match  = routing_rule.value.patterns_to_match
       enabled            = routing_rule.value.enabled
-      
+
       # Forwarding Configuration
       dynamic "forwarding_configuration" {
         for_each = routing_rule.value.route_configuration != null && routing_rule.value.route_configuration.forwarding_protocol != null ? [routing_rule.value.route_configuration] : []
@@ -120,10 +120,10 @@ resource "azurerm_frontdoor" "main" {
           cache_query_parameter_strip_directive = forwarding_configuration.value.cache_query_parameter_strip_directive != null ? forwarding_configuration.value.cache_query_parameter_strip_directive : "StripNone"
           cache_duration                        = forwarding_configuration.value.cache_duration
           cache_use_dynamic_compression         = forwarding_configuration.value.compression_enabled != null ? forwarding_configuration.value.compression_enabled : false
-          custom_forwarding_path                 = forwarding_configuration.value.forwarding_path
+          custom_forwarding_path                = forwarding_configuration.value.forwarding_path
         }
       }
-      
+
       # Redirect Configuration
       dynamic "redirect_configuration" {
         for_each = routing_rule.value.route_configuration != null && routing_rule.value.route_configuration.redirect_type != null ? [routing_rule.value.route_configuration] : []
@@ -138,7 +138,7 @@ resource "azurerm_frontdoor" "main" {
       }
     }
   }
-  
+
   tags = var.tags
 }
 

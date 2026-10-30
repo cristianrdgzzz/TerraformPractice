@@ -93,12 +93,12 @@ output "deployment_ids" {
 output "summary" {
   description = "Summary of created resources"
   value = {
-    network_manager_name = module.network_manager_subscription.network_manager_name
-    network_groups_count = length(module.network_manager_subscription.network_group_ids)
+    network_manager_name       = module.network_manager_subscription.network_manager_name
+    network_groups_count       = length(module.network_manager_subscription.network_group_ids)
     connectivity_configs_count = length(module.network_manager_subscription.connectivity_configuration_ids)
-    security_configs_count = length(module.network_manager_subscription.security_admin_configuration_ids)
-    routing_configs_count = length(module.network_manager_subscription.routing_configuration_ids)
-    deployments_count = length(module.network_manager_subscription.deployment_ids)
+    security_configs_count     = length(module.network_manager_subscription.security_admin_configuration_ids)
+    routing_configs_count      = length(module.network_manager_subscription.routing_configuration_ids)
+    deployments_count          = length(module.network_manager_subscription.deployment_ids)
   }
 }
 

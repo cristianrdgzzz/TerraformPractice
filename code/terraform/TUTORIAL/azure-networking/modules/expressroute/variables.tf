@@ -33,9 +33,9 @@ variable "peering_location" {
 variable "bandwidth_in_mbps" {
   description = "Bandwidth in Mbps. Options: 50, 100, 200, 500, 1000, 2000, 5000, 10000"
   type        = number
-  
+
   validation {
-    condition = contains([50, 100, 200, 500, 1000, 2000, 5000, 10000], var.bandwidth_in_mbps)
+    condition     = contains([50, 100, 200, 500, 1000, 2000, 5000, 10000], var.bandwidth_in_mbps)
     error_message = "Bandwidth must be one of: 50, 100, 200, 500, 1000, 2000, 5000, 10000 Mbps."
   }
 }

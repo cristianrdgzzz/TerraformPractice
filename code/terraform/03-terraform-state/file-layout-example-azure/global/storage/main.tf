@@ -98,10 +98,10 @@ resource "azurerm_cosmosdb_sql_database" "terraform_locks" {
 
 # Define a Cosmos DB SQL container for terraform locks
 resource "azurerm_cosmosdb_sql_container" "terraform_locks" {
-  account_name            = azurerm_cosmosdb_account.terraform_locks.name
-  database_name           = azurerm_cosmosdb_sql_database.terraform_locks.name
-  resource_group_name     = azurerm_resource_group.terraform_state.name
-  name                    = var.cosmos_db_container_name
-  partition_key_path      = "/LockID"
-  partition_key_version   = 2
+  account_name          = azurerm_cosmosdb_account.terraform_locks.name
+  database_name         = azurerm_cosmosdb_sql_database.terraform_locks.name
+  resource_group_name   = azurerm_resource_group.terraform_state.name
+  name                  = var.cosmos_db_container_name
+  partition_key_path    = "/LockID"
+  partition_key_version = 2
 }

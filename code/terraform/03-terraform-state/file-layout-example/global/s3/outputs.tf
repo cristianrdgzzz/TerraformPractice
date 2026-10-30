@@ -36,7 +36,7 @@ output "dynamodb_table_arn" {
 }
 
 output "backend_config_example" {
-  value = <<-EOT
+  value       = <<-EOT
     # ====================================================================================
     # PARTIAL BACKEND CONFIGURATION FOR OTHER MODULES (DRY APPROACH)
     # ====================================================================================

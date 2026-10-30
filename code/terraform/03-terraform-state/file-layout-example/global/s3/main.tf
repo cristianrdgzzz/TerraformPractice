@@ -49,11 +49,11 @@ terraform {
   #   # IMPORTANT: Variables are not allowed
   #   # AWS region where the S3 bucket and DynamoDB table are located
   #   region         = "us-east-2"
-  
+
   #   # DynamoDB table name for state locking
   #   # This prevents concurrent modifications and ensures data consistency
   #   dynamodb_table = "terraform-table"
-  
+
   #   # Enable encryption of state files at rest
   #   # This adds a second layer of encryption on top of S3's default encryption
   #   encrypt        = true

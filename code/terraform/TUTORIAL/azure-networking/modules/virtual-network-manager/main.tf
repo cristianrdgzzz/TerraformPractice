@@ -463,18 +463,18 @@ resource "azurerm_network_manager_routing_rule" "main" {
     # Explanation of the destination type and address: "AddressPrefix" or "ServiceTag"
     # "AddressPrefix" means a specific IP range (e.g., "10.0.0.0/8")
     # "ServiceTag" means a predefined Azure service (e.g., "Internet", "VirtualNetwork", "AzureKeyVault", "Storage")
-    type    = each.value.destination_type    # "AddressPrefix" or "ServiceTag"
+    type = each.value.destination_type # "AddressPrefix" or "ServiceTag"
 
     # Address: The IP range or Azure service tag to match (e.g., "0.0.0.0/0" or "Internet")
-    address = each.value.destination_address  # e.g., "0.0.0.0/0" or "Internet" or "AzureKeyVault" or "Storage"
+    address = each.value.destination_address # e.g., "0.0.0.0/0" or "Internet" or "AzureKeyVault" or "Storage"
   }
 
   # Next-hop configuration  : "VirtualAppliance", "Internet", "VnetLocal", "VnetPeering", "None", "VirtualNetworkGateway", "ExpressRouteGateway"
   # Defines where traffic matching this rule should be sent
   next_hop {
-    type    = each.value.next_hop_type    # "VirtualAppliance", "Internet", "VnetLocal", "VnetPeering", "None", "VirtualNetworkGateway", "ExpressRouteGateway"
+    type = each.value.next_hop_type # "VirtualAppliance", "Internet", "VnetLocal", "VnetPeering", "None", "VirtualNetworkGateway", "ExpressRouteGateway"
     # Address: The IP address or Azure service tag to send the traffic to (e.g., "10.0.1.4" or "Internet")
-    address = each.value.next_hop_address  # IP address for VirtualAppliance, null for others
+    address = each.value.next_hop_address # IP address for VirtualAppliance, null for others
   }
 
   depends_on = [

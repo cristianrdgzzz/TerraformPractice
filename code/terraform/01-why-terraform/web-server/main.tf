@@ -27,7 +27,7 @@ resource "aws_security_group" "web_server_sg" {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Allow from any IP (restrict if needed for security)
+    cidr_blocks = ["0.0.0.0/0"] # Allow from any IP (restrict if needed for security)
   }
 
   # Ingress rule: Allow SSH traffic on port 22 from any IP address for remote administration
@@ -54,13 +54,13 @@ resource "aws_security_group" "web_server_sg" {
 # Create an EC2 instance with Apache2 web server
 resource "aws_instance" "app" {
   # Instance type: t3.micro (eligible for AWS free tier)
-  instance_type              = "t3.micro"
+  instance_type = "t3.micro"
   # Availability zone for instance placement
-  availability_zone          = "us-east-2a"
+  availability_zone = "us-east-2a"
   # Amazon Linux 2 AMI image ID
-  ami                        = "ami-0fb653ca2d3203ac1"
+  ami = "ami-0fb653ca2d3203ac1"
   # Associate the security group for network traffic control
-  vpc_security_group_ids     = [aws_security_group.web_server_sg.id]
+  vpc_security_group_ids = [aws_security_group.web_server_sg.id]
   # Automatically assign a public IP address to the instance
   associate_public_ip_address = true
 

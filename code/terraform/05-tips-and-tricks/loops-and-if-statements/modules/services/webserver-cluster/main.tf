@@ -13,7 +13,7 @@ resource "aws_launch_configuration" "example" {
   image_id        = "ami-0fb653ca2d3203ac1"
   instance_type   = var.instance_type
   security_groups = [aws_security_group.instance.id]
-  user_data       = templatefile("${path.module}/user-data.sh", {
+  user_data = templatefile("${path.module}/user-data.sh", {
     server_port = var.server_port
     db_address  = data.terraform_remote_state.db.outputs.address
     db_port     = data.terraform_remote_state.db.outputs.port
@@ -42,7 +42,7 @@ resource "aws_autoscaling_group" "example" {
 
   dynamic "tag" {
     for_each = {
-      for key, value in var.custom_tags:
+      for key, value in var.custom_tags :
       key => upper(value)
       if key != "Name"
     }
@@ -214,7 +214,7 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu_utilization" {
 resource "aws_cloudwatch_metric_alarm" "low_cpu_credit_balance" {
   count = format("%.1s", var.instance_type) == "t" ? 1 : 0
 
-  alarm_name = "${var.cluster_name}-low-cpu-credit-balance"
+  alarm_name  = "${var.cluster_name}-low-cpu-credit-balance"
   namespace   = "AWS/EC2"
   metric_name = "CPUCreditBalance"
 

@@ -42,7 +42,7 @@ resource "azurerm_lb" "main" {
   resource_group_name = var.resource_group_name
   sku                 = var.sku
   sku_tier            = var.sku_tier
-  
+
   # Frontend IP configurations define where traffic enters the load balancer
   # Can be public (internet-facing) or private (internal)
   dynamic "frontend_ip_configuration" {
@@ -56,7 +56,7 @@ resource "azurerm_lb" "main" {
       zones                         = frontend_ip_configuration.value.zones
     }
   }
-  
+
   tags = var.tags
 }
 
@@ -76,7 +76,7 @@ resource "azurerm_lb_backend_address_pool" "main" {
   for_each = {
     for pool in var.backend_address_pools : pool.name => pool
   }
-  
+
   name            = each.value.name
   loadbalancer_id = azurerm_lb.main.id
 }
@@ -95,14 +95,14 @@ resource "azurerm_lb_probe" "main" {
   for_each = {
     for probe in var.probe_configurations : probe.name => probe
   }
-  
-  name            = each.value.name
-  loadbalancer_id = azurerm_lb.main.id
-  protocol        = each.value.protocol
-  port            = each.value.port
-  request_path    = each.value.request_path
+
+  name                = each.value.name
+  loadbalancer_id     = azurerm_lb.main.id
+  protocol            = each.value.protocol
+  port                = each.value.port
+  request_path        = each.value.request_path
   interval_in_seconds = each.value.interval_in_seconds
-  number_of_probes   = each.value.number_of_probes
+  number_of_probes    = each.value.number_of_probes
 }
 
 # ----------------------------------------------------------------------------
@@ -126,7 +126,7 @@ resource "azurerm_lb_rule" "main" {
   for_each = {
     for rule in var.load_balancing_rules : rule.name => rule
   }
-  
+
   name                           = each.value.name
   loadbalancer_id                = azurerm_lb.main.id
   frontend_ip_configuration_name = each.value.frontend_ip_configuration_name
@@ -163,17 +163,17 @@ resource "azurerm_lb_outbound_rule" "main" {
   for_each = {
     for rule in var.outbound_rules : rule.name => rule
   }
-  
-  name                        = each.value.name
-  loadbalancer_id             = azurerm_lb.main.id
+
+  name            = each.value.name
+  loadbalancer_id = azurerm_lb.main.id
   frontend_ip_configuration {
     name = each.value.frontend_ip_configuration_name
   }
-  backend_address_pool_id     = each.value.backend_address_pool_id
-  protocol                    = each.value.protocol
-  allocated_outbound_ports    = each.value.allocated_outbound_ports
-  idle_timeout_in_minutes     = each.value.idle_timeout_in_minutes
-  enable_tcp_reset            = each.value.enable_tcp_reset
+  backend_address_pool_id  = each.value.backend_address_pool_id
+  protocol                 = each.value.protocol
+  allocated_outbound_ports = each.value.allocated_outbound_ports
+  idle_timeout_in_minutes  = each.value.idle_timeout_in_minutes
+  enable_tcp_reset         = each.value.enable_tcp_reset
 }
 
 # ----------------------------------------------------------------------------
@@ -194,7 +194,7 @@ resource "azurerm_lb_nat_rule" "main" {
   for_each = {
     for rule in var.inbound_nat_rules : rule.name => rule
   }
-  
+
   name                           = each.value.name
   loadbalancer_id                = azurerm_lb.main.id
   frontend_ip_configuration_name = each.value.frontend_ip_configuration_name

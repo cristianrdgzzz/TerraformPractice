@@ -46,14 +46,14 @@ resource "azurerm_express_route_circuit" "main" {
   service_provider_name = var.service_provider_name
   peering_location      = var.peering_location
   bandwidth_in_mbps     = var.bandwidth_in_mbps
-  
+
   sku {
     tier   = var.sku.tier
     family = var.sku.family
   }
-  
+
   allow_classic_operations = var.allow_classic_operations
-  
+
   tags = var.tags
 }
 
@@ -68,7 +68,7 @@ resource "azurerm_public_ip" "gateway" {
   resource_group_name = var.resource_group_name
   allocation_method   = var.gateway_public_ip_configuration.allocation_method
   sku                 = var.gateway_public_ip_configuration.sku
-  
+
   tags = var.tags
 }
 
@@ -92,14 +92,14 @@ resource "azurerm_virtual_network_gateway" "expressroute" {
   type                = "ExpressRoute"
   vpn_type            = null
   sku                 = var.gateway_sku
-  
+
   ip_configuration {
     name                          = var.gateway_ip_configuration.name
     public_ip_address_id          = azurerm_public_ip.gateway.id
     private_ip_address_allocation = "Dynamic"
     subnet_id                     = var.gateway_ip_configuration.subnet_id
   }
-  
+
   tags = var.tags
 }
 
@@ -109,12 +109,12 @@ resource "azurerm_virtual_network_gateway" "expressroute" {
 # ExpressRoute Connection links the ExpressRoute circuit to the gateway.
 # ----------------------------------------------------------------------------
 resource "azurerm_express_route_connection" "main" {
-  name                    = var.express_route_connection_name
+  name                     = var.express_route_connection_name
   express_route_gateway_id = azurerm_virtual_network_gateway.expressroute.id
   express_route_circuit_id = azurerm_express_route_circuit.main.id
-  
+
   routing_weight = var.routing_weight
-  
+
   # Authorization key (if provided)
   authorization_key = var.authorization_key
 }

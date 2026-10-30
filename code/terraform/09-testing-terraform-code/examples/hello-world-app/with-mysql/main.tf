@@ -18,7 +18,7 @@ module "hello_world_app" {
 
   server_text = var.server_text
 
-  environment            = var.environment
+  environment = var.environment
 
   # Pass all the outputs from the mysql module straight through!
   mysql_config = module.mysql

@@ -33,7 +33,7 @@ variable "traffic_routing_method" {
   EOT
   type        = string
   default     = "Performance"
-  
+
   validation {
     condition = contains([
       "Priority",
@@ -81,10 +81,10 @@ variable "monitor_config" {
     protocol                     = string # "HTTP", "HTTPS", "TCP"
     port                         = number
     path                         = optional(string, "/")
-    interval_in_seconds           = number
-    timeout_in_seconds            = number
+    interval_in_seconds          = number
+    timeout_in_seconds           = number
     tolerated_number_of_failures = number
-    expected_status_code_ranges   = optional(list(string), ["200-299"])
+    expected_status_code_ranges  = optional(list(string), ["200-299"])
   })
 }
 
@@ -125,7 +125,7 @@ variable "endpoints" {
     enabled            = optional(bool, true)
     geo_mappings       = optional(list(string), [])
     subnet_ids         = optional(list(string), [])
-    custom_headers     = optional(list(object({
+    custom_headers = optional(list(object({
       name  = string
       value = string
     })), [])

@@ -23,7 +23,7 @@ variable "sku" {
   description = "DDoS Protection Plan SKU. Options: 'Basic' (free, always on) or 'Standard' (paid, advanced features)"
   type        = string
   default     = "Standard"
-  
+
   validation {
     condition     = contains(["Basic", "Standard"], var.sku)
     error_message = "SKU must be either 'Basic' or 'Standard'."

@@ -121,9 +121,9 @@ variable "connectivity_configurations" {
     topology                        = string # "HubAndSpoke" or "Mesh"
     network_group_names             = list(string)
     group_connectivity              = optional(string, "None") # "None" or "DirectlyConnected"
-    use_hub_gateway                = optional(bool, false)    # If true, spokes can use hub's VPN/ExpressRoute gateway
+    use_hub_gateway                 = optional(bool, false)    # If true, spokes can use hub's VPN/ExpressRoute gateway
     delete_existing_peering_enabled = optional(bool, false)
-    description                    = optional(string)
+    description                     = optional(string)
     hub = optional(object({
       resource_id   = string
       resource_type = string # "Microsoft.Network/virtualNetworks"
@@ -212,9 +212,9 @@ variable "routing_rules" {
   type = map(object({
     rule_collection_name = string
     description          = optional(string)
-    destination_type     = string # "AddressPrefix" or "ServiceTag"
-    destination_address  = string # e.g., "0.0.0.0/0" or "Internet"
-    next_hop_type        = string # "VirtualAppliance", "Internet", "VnetLocal", "VnetPeering", "None"
+    destination_type     = string           # "AddressPrefix" or "ServiceTag"
+    destination_address  = string           # e.g., "0.0.0.0/0" or "Internet"
+    next_hop_type        = string           # "VirtualAppliance", "Internet", "VnetLocal", "VnetPeering", "None"
     next_hop_address     = optional(string) # IP address for VirtualAppliance, null for others
   }))
   default = {}
@@ -226,8 +226,8 @@ variable "routing_rules" {
 variable "deployments" {
   description = "Map of configuration deployments to regions. Configurations do not take effect until deployed."
   type = map(object({
-    location         = string
-    scope_access     = string # "Connectivity", "SecurityAdmin", "Routing"
+    location          = string
+    scope_access      = string # "Connectivity", "SecurityAdmin", "Routing"
     configuration_ids = list(string)
   }))
   default = {}

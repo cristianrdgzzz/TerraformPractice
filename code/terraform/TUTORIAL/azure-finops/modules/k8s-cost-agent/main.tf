@@ -25,7 +25,7 @@ resource "azurerm_kubernetes_cluster_extension" "kubecost" {
   cluster_id     = var.aks_cluster_id
   extension_type = "microsoft.azure.kubecost"
   release_train  = var.kubecost_release_train
-  
+
   configuration_settings = var.kubecost_configuration_settings
 
   # Auto-upgrade settings

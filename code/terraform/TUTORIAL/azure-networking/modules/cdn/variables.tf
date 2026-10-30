@@ -25,7 +25,7 @@ variable "sku" {
   description = "CDN profile SKU. Options: 'Standard_Akamai', 'Standard_Verizon', 'Standard_Microsoft', 'Premium_Verizon', 'Premium_Microsoft'"
   type        = string
   default     = "Standard_Microsoft"
-  
+
   validation {
     condition = contains([
       "Standard_Akamai",
@@ -66,8 +66,8 @@ variable "cdn_endpoints" {
     }
   EOT
   type = map(object({
-    name                          = string
-    origin_host_header            = optional(string, null)
+    name               = string
+    origin_host_header = optional(string, null)
     origins = list(object({
       name       = string
       host_name  = string
@@ -75,7 +75,7 @@ variable "cdn_endpoints" {
       https_port = number
     }))
     is_http_allowed               = optional(bool, true)
-    is_https_allowed               = optional(bool, true)
+    is_https_allowed              = optional(bool, true)
     querystring_caching_behaviour = optional(string, "IgnoreQueryString")
     content_types_to_compress     = optional(list(string), [])
     is_compression_enabled        = optional(bool, false)
