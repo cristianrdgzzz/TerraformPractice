@@ -1,4 +1,4 @@
-name: '2. Desplegar Terraform why terraform'
+name: 'Despliegue Wevserver Cluster Azure 2.0'
  
 on: 
   workflow_dispatch: 
