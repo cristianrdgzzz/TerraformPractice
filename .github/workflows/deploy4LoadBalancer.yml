@@ -1,4 +1,4 @@
-name: '3. Despliegue Webserver Cluster Azure 2.0'
+name: '3. Despliegue LOAD BALANCER'
  
 on: 
   workflow_dispatch: 
