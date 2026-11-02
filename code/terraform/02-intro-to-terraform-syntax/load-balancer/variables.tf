@@ -1,60 +1,40 @@
-# ============================================================================
-# VARIABLES: Configurable parameters for the load balancer
-# ============================================================================
-
-# Variable: AWS Region
-variable "aws_region" {
-  description = "AWS region where resources will be deployed"
+variable "resource_group_name" {
+  description = "Nombre del grupo de recursos de Azure"
   type        = string
-  default     = "us-east-2"
+  default     = "rg-web-cluster"
 }
 
-# Variable: Application Load Balancer name
-variable "alb_name" {
-  description = "Name of the Application Load Balancer"
+variable "location" {
+  description = "Región de Azure"
   type        = string
-  default     = "terraform-asg-example"
-
-  validation {
-    condition     = length(var.alb_name) <= 32
-    error_message = "ALB name must be 32 characters or less."
-  }
+  default     = "westus2"
 }
 
-# Variable: ALB security group name
-variable "alb_security_group_name" {
-  description = "Name of the security group for the ALB"
+variable "environment" {
+  description = "Nombre del entorno, usado también para formar nombres"
   type        = string
-  default     = "terraform-example-alb"
+  default     = "production"
 }
 
-# Variable: Instance security group name
-variable "instance_security_group_name" {
-  description = "Name of the security group for EC2 instances"
+variable "vnet_address_space" {
+  description = "Rango de direcciones de la red virtual"
   type        = string
-  default     = "terraform-example-instance"
+  default     = "10.0.0.0/16"
 }
 
-# Variable: Target group name
-variable "target_group_name" {
-  description = "Name of the ALB target group"
+variable "subnet_address_prefixes" {
+  description = "Rango de direcciones de la subred"
   type        = string
-  default     = "terraform-asg-example"
-
-  validation {
-    condition     = length(var.target_group_name) <= 32
-    error_message = "Target group name must be 32 characters or less."
-  }
+  default     = "10.0.1.0/24"
 }
 
-# Variable: Server port for the web server
 variable "server_port" {
-  description = "Port number for the web server to listen on"
+  description = "Puerto HTTP en el que escucha la aplicación de cada máquina"
   type        = number
-  default     = 8080
+  default     = 80
 
   validation {
-    condition     = var.server_port > 1024 && var.server_port < 65536
-    error_message = "Server port must be between 1024 and 65535."
+    condition     = var.server_port >= 1 && var.server_port <= 65535
+    error_message = "server_port debe estar entre 1 y 65535."
   }
 }
