@@ -1,4 +1,4 @@
-name: '4. Despliegue LOAD BALANCER'
+name: 'Despliegue LOAD BALANCER'
  
 on: 
   workflow_dispatch: 
