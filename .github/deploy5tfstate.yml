@@ -1,4 +1,4 @@
-name: 'Despliegue LOAD BALANCER'
+name: 'Despliegue tfstatefilelayout-example-azure'
  
 on: 
   workflow_dispatch: 
