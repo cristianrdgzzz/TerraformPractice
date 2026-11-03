@@ -6,7 +6,7 @@ on:
       folder: 
         description: 'Ruta de la carpeta a ejecutar' 
         required: true 
-        default: 'code/terraform/03-terraform-state/file-layout-example-azure'
+        default: 'code/terraform/03-terraform-state/file-layout-example-azure/global/storage'
       action: 
         description: 'Acción a realizar' 
         required: true 
