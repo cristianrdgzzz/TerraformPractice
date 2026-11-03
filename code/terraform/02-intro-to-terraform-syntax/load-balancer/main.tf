@@ -28,7 +28,7 @@ terraform {
     resource_group_name  = "rg-terraform-state"
     storage_account_name = "sttflibro1855"
     container_name       = "tfstate"
-    key                  = "01-web-server-azure.terraform.tfstate"
+    key                  = "LoadBalancer.tfstate"
   }
 }
 
