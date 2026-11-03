@@ -1,3 +1,4 @@
+#Primero terraform y el provider de Azure 
 terraform {
   required_version = ">= 1.0.0, < 2.0.0"
 
@@ -11,7 +12,16 @@ terraform {
       version = "~> 4.0"
     }
   }
+  # Configuración del backend para almacenar el estado de Terraform en Azure Storage
+  backend "azurerm" {
+    resource_group_name  = "rg-terraform-state"
+    storage_account_name = "sttflibro1855"
+    container_name       = "tfstate"
+    key                  = "webservercluster.tfstate"
+  }
 }
+
+
 
 variable "subscription_id" {
   description = "The Azure subscription ID"
@@ -218,9 +228,8 @@ resource "azurerm_linux_virtual_machine_scale_set" "webserver_cluster" {
               EOF
   )
 
-  tag {
-    key   = "Environment"
-    value = "Production"
+  tags = {
+    Environment = "Production"
   }
 }
 
@@ -245,8 +254,9 @@ resource "azurerm_monitor_autoscale_setting" "webserver_cluster" {
       metric_trigger {
         metric_name        = "Percentage CPU"
         metric_resource_id = azurerm_linux_virtual_machine_scale_set.webserver_cluster.id
-        time_grain         = "PT1M"
         statistic          = "Average"
+        time_grain         = "PT1M"
+        time_aggregation   = "Average"
         time_window        = "PT5M"
         operator           = "GreaterThan"
         threshold          = 70
@@ -264,8 +274,9 @@ resource "azurerm_monitor_autoscale_setting" "webserver_cluster" {
       metric_trigger {
         metric_name        = "Percentage CPU"
         metric_resource_id = azurerm_linux_virtual_machine_scale_set.webserver_cluster.id
-        time_grain         = "PT1M"
         statistic          = "Average"
+        time_grain         = "PT1M"
+        time_aggregation   = "Average"
         time_window        = "PT5M"
         operator           = "LessThan"
         threshold          = 30

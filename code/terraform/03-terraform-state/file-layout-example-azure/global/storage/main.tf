@@ -46,7 +46,7 @@ resource "azurerm_storage_account" "terraform_state" {
 # Containers are used to organize blobs (files) in the storage account
 resource "azurerm_storage_container" "terraform_state" {
   name                  = var.container_name
-  storage_account_name  = azurerm_storage_account.terraform_state.name
+  storage_account_id  = azurerm_storage_account.terraform_state.id
   container_access_type = "private"
 }
 
@@ -63,7 +63,7 @@ resource "azurerm_storage_management_policy" "terraform_state" {
       prefix_match = [var.container_name]
     }
     actions {
-      version_action {
+      version {
         delete_after_days_since_creation = 90
       }
     }
@@ -102,6 +102,6 @@ resource "azurerm_cosmosdb_sql_container" "terraform_locks" {
   database_name         = azurerm_cosmosdb_sql_database.terraform_locks.name
   resource_group_name   = azurerm_resource_group.terraform_state.name
   name                  = var.cosmos_db_container_name
-  partition_key_path    = "/LockID"
+  partition_key_paths    = ["/LockID"]
   partition_key_version = 2
 }

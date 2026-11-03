@@ -1,3 +1,4 @@
+#Primero terraform y el provider de Azure 
 terraform {
   required_version = ">= 1.0.0, < 2.0.0"
 
@@ -6,6 +7,17 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 3.0"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.0"
+    }
+  }
+  # Configuración del backend para almacenar el estado de Terraform en Azure Storage
+  backend "azurerm" {
+    resource_group_name  = "rg-terraform-state"
+    storage_account_name = "sttflibro1855"
+    container_name       = "tfstate"
+    key                  = "datastoresmysql.tfstate"
   }
 }
 

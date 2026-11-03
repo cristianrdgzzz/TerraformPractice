@@ -54,7 +54,7 @@ variable "vmss_name" {
 variable "vm_size" {
   description = "The size of the VMs in the scale set (e.g., 'Standard_B1s')."
   type        = string
-  default     = "Standard_B1s"
+  default     = "Standard_D2s_v7"
 }
 
 variable "instance_count" {
