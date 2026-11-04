@@ -1,4 +1,4 @@
-name: 'Despliegue tfstatefilelayout-example-azure'
+name: 'Despliegue tfstatefilelayout-global
  
 on: 
   workflow_dispatch: 
