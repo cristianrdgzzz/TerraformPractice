@@ -3,10 +3,6 @@ name: 'Despliegue tfstatefilelayout-global'
 on: 
   workflow_dispatch: 
     inputs: 
-      folder: 
-        description: 'Ruta de la carpeta a ejecutar' 
-        required: true 
-        default: 'code/terraform/03-terraform-state/file-layout-example-azure/global/storage'
       action: 
         description: 'Acción a realizar' 
         required: true 
@@ -20,10 +16,14 @@ jobs:
   terraform: 
     name: 'Terraform ${{ inputs.action }}' 
     runs-on: ubuntu-latest 
+    env:
+      TF_VAR_resource_group_name: 'rg-tfstate-practice'
+      TF_VAR_storage_account_name: 'sttfpractice2026'
+      TF_VAR_cosmos_db_account_name: 'cosmostfpractice2026'
  
     defaults: 
       run: 
-        working-directory: ./${{ inputs.folder }} 
+        working-directory: ./code/terraform/03-terraform-state/file-layout-example-azure/global/storage
  
     steps: 
     - name: Checkout del código 
